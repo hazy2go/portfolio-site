@@ -13,12 +13,12 @@ if (typewriter) {
         if (index < text.length) {
             typewriter.textContent += text.charAt(index);
             index++;
-            setTimeout(type, 80 + Math.random() * 40);
+            setTimeout(type, 120 + Math.random() * 60);
         }
     }
 
     // Start typing after page load animation
-    setTimeout(type, 800);
+    setTimeout(type, 1200);
 }
 
 // ===== Mobile Navigation Toggle =====

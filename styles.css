@@ -247,18 +247,21 @@ body {
     opacity: 0;
     transform: translateY(20px);
     animation: fadeInUp 0.8s ease 0.4s forwards;
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
 }
 
 .typewriter {
     display: inline;
+    white-space: nowrap;
 }
 
 .cursor {
-    display: inline-block;
+    display: inline;
     color: var(--accent);
-    font-weight: 400;
+    font-weight: 300;
     animation: blink 1s step-end infinite;
-    margin-left: 2px;
 }
 
 @keyframes blink {
