@@ -466,6 +466,7 @@ section {
     color: var(--text-primary);
     line-height: 1.5;
     margin-bottom: 24px;
+    text-wrap: balance;
 }
 
 .about-text p {
@@ -1677,6 +1678,15 @@ a.client-card {
 
     .timeline-marker {
         left: -28px;
+    }
+
+    .about-lead {
+        font-size: 1.2rem;
+        line-height: 1.6;
+    }
+
+    .about-text {
+        font-size: 1rem;
     }
 
     .about-details {
