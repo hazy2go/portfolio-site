@@ -389,34 +389,6 @@ section {
     position: relative;
 }
 
-/* Section dividers with accent glow */
-section:not(.hero):not(.footer)::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg,
-        transparent 0%,
-        rgba(59, 130, 246, 0.1) 15%,
-        rgba(99, 102, 241, 0.3) 50%,
-        rgba(59, 130, 246, 0.1) 85%,
-        transparent 100%
-    );
-}
-
-section:not(.hero):not(.footer)::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 200px;
-    height: 80px;
-    background: radial-gradient(ellipse at center top, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
-    pointer-events: none;
-}
 
 .section-header {
     margin-bottom: 64px;
@@ -446,7 +418,7 @@ section:not(.hero):not(.footer)::after {
 
 /* ===== About Section ===== */
 .about {
-    background: var(--bg-secondary);
+    background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-secondary) 100%);
 }
 
 .about-main {
@@ -542,7 +514,7 @@ section:not(.hero):not(.footer)::after {
 
 /* ===== Featured Section ===== */
 .featured {
-    background: var(--bg-primary);
+    background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 50%, var(--bg-primary) 100%);
 }
 
 .featured-card {
@@ -749,7 +721,7 @@ section:not(.hero):not(.footer)::after {
 
 /* ===== Experience Timeline ===== */
 .experience {
-    background: var(--bg-secondary);
+    background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-secondary) 100%);
 }
 
 /* Timeline Toggle Button */
@@ -899,7 +871,7 @@ section:not(.hero):not(.footer)::after {
 
 /* ===== Clients Section ===== */
 .clients {
-    background: var(--bg-primary);
+    background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 50%, var(--bg-primary) 100%);
 }
 
 .clients-carousel {
@@ -977,7 +949,7 @@ a.client-card {
 
 /* ===== Skills Section ===== */
 .skills {
-    background: var(--bg-secondary);
+    background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-secondary) 100%);
 }
 
 .skills-carousel {
@@ -1054,7 +1026,7 @@ a.client-card {
 
 /* ===== Achievements Section ===== */
 .achievements {
-    background: var(--bg-primary);
+    background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 50%, var(--bg-primary) 100%);
 }
 
 .achievements-carousel {
@@ -1110,7 +1082,7 @@ a.client-card {
 
 /* ===== Contact Section ===== */
 .contact {
-    background: var(--bg-secondary);
+    background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-secondary) 100%);
     text-align: center;
 }
 
@@ -1223,10 +1195,10 @@ a.client-card {
 
 /* ===== Footer ===== */
 .footer {
-    background: var(--bg-primary);
+    background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
     padding: 40px 0;
     text-align: center;
-    border-top: 1px solid var(--border-subtle);
+    border-top: none;
 }
 
 .footer p {
