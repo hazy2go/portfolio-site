@@ -849,6 +849,14 @@ section {
     background: var(--bg-primary);
 }
 
+.clients-carousel {
+    position: relative;
+}
+
+.clients-dots {
+    display: none;
+}
+
 .clients-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -994,6 +1002,14 @@ a.client-card {
 /* ===== Achievements Section ===== */
 .achievements {
     background: var(--bg-primary);
+}
+
+.achievements-carousel {
+    position: relative;
+}
+
+.achievements-dots {
+    display: none;
 }
 
 .achievements-grid {
@@ -1507,6 +1523,99 @@ a.client-card {
     }
 
     .skills-dots .dot.active {
+        background: var(--accent);
+        box-shadow: 0 0 10px var(--accent-glow);
+    }
+
+    /* Clients Carousel for Mobile */
+    .clients-carousel {
+        margin: 0 -24px;
+        padding: 0 24px;
+    }
+
+    .clients-grid {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 16px;
+        padding-bottom: 16px;
+        max-width: none;
+    }
+
+    .clients-grid::-webkit-scrollbar {
+        display: none;
+    }
+
+    .client-card {
+        flex: 0 0 70%;
+        scroll-snap-align: center;
+    }
+
+    .clients-dots {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 20px;
+    }
+
+    .clients-dots .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--border-color);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .clients-dots .dot.active {
+        background: var(--accent);
+        box-shadow: 0 0 10px var(--accent-glow);
+    }
+
+    /* Achievements Carousel for Mobile */
+    .achievements-carousel {
+        margin: 0 -24px;
+        padding: 0 24px;
+    }
+
+    .achievements-grid {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 16px;
+        padding-bottom: 16px;
+    }
+
+    .achievements-grid::-webkit-scrollbar {
+        display: none;
+    }
+
+    .achievement-card {
+        flex: 0 0 70%;
+        scroll-snap-align: center;
+    }
+
+    .achievements-dots {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 20px;
+    }
+
+    .achievements-dots .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--border-color);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .achievements-dots .dot.active {
         background: var(--accent);
         box-shadow: 0 0 10px var(--accent-glow);
     }

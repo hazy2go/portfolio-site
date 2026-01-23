@@ -42,32 +42,41 @@ if (navToggle) {
     });
 }
 
-// ===== Skills Carousel (Mobile) =====
-const skillsGrid = document.querySelector('.skills-grid');
-const skillsDots = document.querySelectorAll('.skills-dots .dot');
+// ===== Mobile Carousels =====
+function setupCarousel(gridSelector, dotsSelector, cardSelector) {
+    const grid = document.querySelector(gridSelector);
+    const dots = document.querySelectorAll(dotsSelector);
 
-if (skillsGrid && skillsDots.length > 0) {
-    skillsGrid.addEventListener('scroll', () => {
-        const scrollLeft = skillsGrid.scrollLeft;
-        const cardWidth = skillsGrid.querySelector('.skill-category').offsetWidth + 16;
-        const activeIndex = Math.round(scrollLeft / cardWidth);
+    if (grid && dots.length > 0) {
+        grid.addEventListener('scroll', () => {
+            const card = grid.querySelector(cardSelector);
+            if (!card) return;
+            const cardWidth = card.offsetWidth + 16;
+            const activeIndex = Math.round(grid.scrollLeft / cardWidth);
 
-        skillsDots.forEach((dot, index) => {
-            dot.classList.toggle('active', index === activeIndex);
-        });
-    }, { passive: true });
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === activeIndex);
+            });
+        }, { passive: true });
 
-    // Click on dots to scroll
-    skillsDots.forEach((dot, index) => {
-        dot.addEventListener('click', () => {
-            const cardWidth = skillsGrid.querySelector('.skill-category').offsetWidth + 16;
-            skillsGrid.scrollTo({
-                left: index * cardWidth,
-                behavior: 'smooth'
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                const card = grid.querySelector(cardSelector);
+                if (!card) return;
+                const cardWidth = card.offsetWidth + 16;
+                grid.scrollTo({
+                    left: index * cardWidth,
+                    behavior: 'smooth'
+                });
             });
         });
-    });
+    }
 }
+
+// Initialize all carousels
+setupCarousel('.skills-grid', '.skills-dots .dot', '.skill-category');
+setupCarousel('.clients-grid', '.clients-dots .dot', '.client-card');
+setupCarousel('.achievements-grid', '.achievements-dots .dot', '.achievement-card');
 
 // ===== Discord Popup =====
 const discordBtn = document.querySelector('.discord-btn');
