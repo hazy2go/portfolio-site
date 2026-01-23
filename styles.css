@@ -466,7 +466,9 @@ section {
     color: var(--text-primary);
     line-height: 1.5;
     margin-bottom: 24px;
-    text-wrap: balance;
+    text-wrap: pretty;
+    word-break: normal;
+    overflow-wrap: normal;
 }
 
 .about-text p {
@@ -1681,8 +1683,9 @@ a.client-card {
     }
 
     .about-lead {
-        font-size: 1.2rem;
-        line-height: 1.6;
+        font-size: 1.15rem;
+        line-height: 1.7;
+        text-wrap: pretty;
     }
 
     .about-text {
