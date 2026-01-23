@@ -1686,10 +1686,12 @@ a.client-card {
         font-size: 1.15rem;
         line-height: 1.7;
         text-wrap: pretty;
+        text-align: center;
     }
 
     .about-text {
         font-size: 1rem;
+        text-align: center;
     }
 
     .about-details {
