@@ -571,12 +571,12 @@ if (timelineToggle && hiddenTimelineItems.length > 0) {
             hiddenTimelineItems.forEach(item => item.classList.add('show'));
             timelineToggle.classList.add('active');
             timelineToggle.querySelector('.toggle-text').textContent = 'Hide Timeline';
-
-            // Refresh ScrollTrigger after expansion
-            setTimeout(() => {
-                ScrollTrigger.refresh();
-            }, 600);
         }
+
+        // Refresh ScrollTrigger after expand/collapse animation
+        setTimeout(() => {
+            ScrollTrigger.refresh();
+        }, 600);
     });
 }
 
