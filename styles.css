@@ -1125,6 +1125,8 @@ a.client-card {
     background: var(--text-primary);
     color: var(--bg-primary);
     border: none;
+    cursor: pointer;
+    font-family: inherit;
 }
 
 .contact-link.primary:hover {
