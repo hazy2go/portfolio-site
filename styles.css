@@ -1483,17 +1483,19 @@ a.client-card {
     /* Skills Carousel for Mobile */
     .skills-carousel {
         margin: 0 -24px;
-        padding: 0 24px;
+        padding: 0;
     }
 
     .skills-grid {
         display: flex;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
-        gap: 16px;
-        padding-bottom: 16px;
+        gap: 12px;
+        padding: 0 24px 16px;
+        scroll-padding: 24px;
     }
 
     .skills-grid::-webkit-scrollbar {
@@ -1501,8 +1503,9 @@ a.client-card {
     }
 
     .skill-category {
-        flex: 0 0 85%;
-        scroll-snap-align: center;
+        flex: 0 0 calc(100% - 48px);
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
         padding: 28px;
     }
 
@@ -1530,17 +1533,19 @@ a.client-card {
     /* Clients Carousel for Mobile */
     .clients-carousel {
         margin: 0 -24px;
-        padding: 0 24px;
+        padding: 0;
     }
 
     .clients-grid {
         display: flex;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
-        gap: 16px;
-        padding-bottom: 16px;
+        gap: 12px;
+        padding: 0 24px 16px;
+        scroll-padding: 24px;
         max-width: none;
     }
 
@@ -1549,8 +1554,9 @@ a.client-card {
     }
 
     .client-card {
-        flex: 0 0 70%;
-        scroll-snap-align: center;
+        flex: 0 0 calc(100% - 48px);
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
     }
 
     .clients-dots {
@@ -1577,17 +1583,19 @@ a.client-card {
     /* Achievements Carousel for Mobile */
     .achievements-carousel {
         margin: 0 -24px;
-        padding: 0 24px;
+        padding: 0;
     }
 
     .achievements-grid {
         display: flex;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
-        gap: 16px;
-        padding-bottom: 16px;
+        gap: 12px;
+        padding: 0 24px 16px;
+        scroll-padding: 24px;
     }
 
     .achievements-grid::-webkit-scrollbar {
@@ -1595,8 +1603,9 @@ a.client-card {
     }
 
     .achievement-card {
-        flex: 0 0 70%;
-        scroll-snap-align: center;
+        flex: 0 0 calc(100% - 48px);
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
     }
 
     .achievements-dots {

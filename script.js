@@ -51,7 +51,7 @@ function setupCarousel(gridSelector, dotsSelector, cardSelector) {
         grid.addEventListener('scroll', () => {
             const card = grid.querySelector(cardSelector);
             if (!card) return;
-            const cardWidth = card.offsetWidth + 16;
+            const cardWidth = card.offsetWidth + 12;
             const activeIndex = Math.round(grid.scrollLeft / cardWidth);
 
             dots.forEach((dot, index) => {
@@ -63,7 +63,7 @@ function setupCarousel(gridSelector, dotsSelector, cardSelector) {
             dot.addEventListener('click', () => {
                 const card = grid.querySelector(cardSelector);
                 if (!card) return;
-                const cardWidth = card.offsetWidth + 16;
+                const cardWidth = card.offsetWidth + 12;
                 grid.scrollTo({
                     left: index * cardWidth,
                     behavior: 'smooth'
