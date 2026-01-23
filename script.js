@@ -3,6 +3,24 @@
 // Register ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
 
+// ===== Typewriter Effect =====
+const typewriter = document.querySelector('.typewriter');
+if (typewriter) {
+    const text = typewriter.dataset.text;
+    let index = 0;
+
+    function type() {
+        if (index < text.length) {
+            typewriter.textContent += text.charAt(index);
+            index++;
+            setTimeout(type, 80 + Math.random() * 40);
+        }
+    }
+
+    // Start typing after page load animation
+    setTimeout(type, 800);
+}
+
 // ===== Mobile Navigation Toggle =====
 const navToggle = document.querySelector('.nav-toggle');
 const navLinks = document.querySelector('.nav-links');
