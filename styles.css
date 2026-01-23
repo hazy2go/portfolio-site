@@ -919,10 +919,18 @@ a.client-card {
     background: var(--bg-secondary);
 }
 
+.skills-carousel {
+    position: relative;
+}
+
 .skills-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 32px;
+}
+
+.skills-dots {
+    display: none;
 }
 
 .skill-category {
@@ -1177,6 +1185,8 @@ a.client-card {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+/* ===== Mobile Navigation Toggle ===== */
 
 /* ===== Mobile Navigation Toggle ===== */
 .nav-toggle {
@@ -1452,6 +1462,53 @@ a.client-card {
 
     .scroll-indicator {
         display: none;
+    }
+
+    /* Skills Carousel for Mobile */
+    .skills-carousel {
+        margin: 0 -24px;
+        padding: 0 24px;
+    }
+
+    .skills-grid {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 16px;
+        padding-bottom: 16px;
+    }
+
+    .skills-grid::-webkit-scrollbar {
+        display: none;
+    }
+
+    .skill-category {
+        flex: 0 0 85%;
+        scroll-snap-align: center;
+        padding: 28px;
+    }
+
+    .skills-dots {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 20px;
+    }
+
+    .skills-dots .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--border-color);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .skills-dots .dot.active {
+        background: var(--accent);
+        box-shadow: 0 0 10px var(--accent-glow);
     }
 
     .timeline {

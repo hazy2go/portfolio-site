@@ -42,6 +42,33 @@ if (navToggle) {
     });
 }
 
+// ===== Skills Carousel (Mobile) =====
+const skillsGrid = document.querySelector('.skills-grid');
+const skillsDots = document.querySelectorAll('.skills-dots .dot');
+
+if (skillsGrid && skillsDots.length > 0) {
+    skillsGrid.addEventListener('scroll', () => {
+        const scrollLeft = skillsGrid.scrollLeft;
+        const cardWidth = skillsGrid.querySelector('.skill-category').offsetWidth + 16;
+        const activeIndex = Math.round(scrollLeft / cardWidth);
+
+        skillsDots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === activeIndex);
+        });
+    }, { passive: true });
+
+    // Click on dots to scroll
+    skillsDots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            const cardWidth = skillsGrid.querySelector('.skill-category').offsetWidth + 16;
+            skillsGrid.scrollTo({
+                left: index * cardWidth,
+                behavior: 'smooth'
+            });
+        });
+    });
+}
+
 // ===== Discord Popup =====
 const discordBtn = document.querySelector('.discord-btn');
 const discordPopup = document.getElementById('discordPopup');
