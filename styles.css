@@ -1712,5 +1712,14 @@ a.client-card {
     }
 }
 
+/* ===== Calendly Popup Fix ===== */
+.calendly-overlay {
+    position: fixed !important;
+}
+
+.calendly-overlay .calendly-popup {
+    transform: none !important;
+}
+
 /* ===== Animation Classes ===== */
 /* Animations handled by GSAP */
