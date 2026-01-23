@@ -580,6 +580,41 @@ if (timelineToggle && hiddenTimelineItems.length > 0) {
     });
 }
 
+// ===== Calendly Modal =====
+const calendlyModal = document.getElementById('calendlyModal');
+const openCalendlyBtn = document.getElementById('openCalendlyModal');
+const closeCalendlyBtn = document.getElementById('closeCalendlyModal');
+const calendlyModalOverlay = document.querySelector('.calendly-modal-overlay');
+
+function openCalendlyModal() {
+    calendlyModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeCalendlyModal() {
+    calendlyModal.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+if (openCalendlyBtn) {
+    openCalendlyBtn.addEventListener('click', openCalendlyModal);
+}
+
+if (closeCalendlyBtn) {
+    closeCalendlyBtn.addEventListener('click', closeCalendlyModal);
+}
+
+if (calendlyModalOverlay) {
+    calendlyModalOverlay.addEventListener('click', closeCalendlyModal);
+}
+
+// Close Calendly modal on escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && calendlyModal?.classList.contains('active')) {
+        closeCalendlyModal();
+    }
+});
+
 // ===== Initialize =====
 document.addEventListener('DOMContentLoaded', () => {
     // Add loaded class to body for initial animations
