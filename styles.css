@@ -1682,15 +1682,21 @@ a.client-card {
         left: -28px;
     }
 
-    .about-lead {
-        font-size: 1.15rem;
-        line-height: 1.7;
-        text-wrap: pretty;
+    .about-main {
         text-align: center;
+        justify-items: center;
     }
 
     .about-text {
         font-size: 1rem;
+        text-align: center;
+        max-width: 100%;
+    }
+
+    .about-lead {
+        font-size: 1.15rem;
+        line-height: 1.7;
+        text-wrap: pretty;
         text-align: center;
     }
 
