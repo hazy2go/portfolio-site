@@ -522,12 +522,14 @@ const modalOverlay = document.querySelector('.video-modal-overlay');
 const modalVideos = document.querySelectorAll('.video-modal-grid video');
 
 function openModal() {
-    videoModal.classList.add('active');
+    videoModal.style.display = 'flex';
+    setTimeout(() => videoModal.classList.add('active'), 10);
     document.body.style.overflow = 'hidden';
 }
 
 function closeModal() {
     videoModal.classList.remove('active');
+    setTimeout(() => videoModal.style.display = 'none', 300);
     document.body.style.overflow = '';
     // Pause all videos when closing
     modalVideos.forEach(video => {
@@ -587,12 +589,14 @@ const closeCalendlyBtn = document.getElementById('closeCalendlyModal');
 const calendlyModalOverlay = document.querySelector('.calendly-modal-overlay');
 
 function openCalendlyModal() {
-    calendlyModal.classList.add('active');
+    calendlyModal.style.display = 'flex';
+    setTimeout(() => calendlyModal.classList.add('active'), 10);
     document.body.style.overflow = 'hidden';
 }
 
 function closeCalendlyModal() {
     calendlyModal.classList.remove('active');
+    setTimeout(() => calendlyModal.style.display = 'none', 300);
     document.body.style.overflow = '';
 }
 
