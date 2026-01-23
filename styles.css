@@ -386,6 +386,54 @@ body {
 /* ===== Section Styles ===== */
 section {
     padding: 120px 0;
+    position: relative;
+}
+
+/* Gradient transitions between sections */
+section:not(.hero)::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    background: linear-gradient(to bottom, transparent, transparent);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Primary to Secondary transition (going down) */
+.about::before,
+.experience::before,
+.skills::before,
+.contact::before {
+    background: linear-gradient(to bottom, var(--bg-primary) 0%, transparent 100%);
+}
+
+/* Secondary to Primary transition (going down) */
+.featured::before,
+.clients::before,
+.achievements::before {
+    background: linear-gradient(to bottom, var(--bg-secondary) 0%, transparent 100%);
+}
+
+/* Subtle accent glow dividers */
+section::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--border-color) 20%, var(--accent-glow) 50%, var(--border-color) 80%, transparent 100%);
+    opacity: 0.5;
+}
+
+.hero::after,
+.contact::after,
+.footer::after {
+    display: none;
 }
 
 .section-header {
