@@ -3,22 +3,32 @@
 // Register ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
 
-// ===== Typewriter Effect =====
+// ===== Typewriter Effect (Smooth) =====
 const typewriter = document.querySelector('.typewriter');
 if (typewriter) {
     const text = typewriter.dataset.text;
-    let index = 0;
-
-    function type() {
-        if (index < text.length) {
-            typewriter.textContent += text.charAt(index);
-            index++;
-            setTimeout(type, 120 + Math.random() * 60);
+    const duration = 1800; // total duration in ms
+    const startTime = performance.now() + 1200; // delay before start
+    
+    function type(currentTime) {
+        const elapsed = currentTime - startTime;
+        if (elapsed < 0) {
+            requestAnimationFrame(type);
+            return;
+        }
+        
+        const progress = Math.min(elapsed / duration, 1);
+        const charIndex = Math.floor(progress * text.length);
+        typewriter.textContent = text.substring(0, charIndex);
+        
+        if (progress < 1) {
+            requestAnimationFrame(type);
+        } else {
+            typewriter.textContent = text;
         }
     }
-
-    // Start typing after page load animation
-    setTimeout(type, 1200);
+    
+    requestAnimationFrame(type);
 }
 
 // ===== Mobile Navigation Toggle =====
@@ -247,13 +257,24 @@ function animateCounter(element, target, duration = 2000) {
     updateCounter();
 }
 
-// ===== Hero Stats Counter =====
+// ===== Hero Stats Counter (GSAP Smooth) =====
 const heroStats = document.querySelectorAll('.hero .stat-number');
 heroStats.forEach(stat => {
     const target = parseInt(stat.dataset.target);
-    setTimeout(() => {
-        animateCounter(stat, target, 1500);
-    }, 1200);
+    const obj = { value: 0 };
+    
+    gsap.to(obj, {
+        value: target,
+        duration: 2,
+        delay: 1.2,
+        ease: "power2.out",
+        onUpdate: () => {
+            stat.textContent = Math.round(obj.value);
+        },
+        onComplete: () => {
+            stat.textContent = target;
+        }
+    });
 });
 
 // ===== Section Reveals =====
