@@ -27,15 +27,15 @@ const navLinks = document.querySelector('.nav-links');
 const navOverlay = document.querySelector('.nav-overlay');
 
 function closeMenu() {
-    navToggle.classList.remove('active');
-    navLinks.classList.remove('active');
+    if (navToggle) navToggle.classList.remove('active');
+    if (navLinks) navLinks.classList.remove('active');
     if (navOverlay) navOverlay.classList.remove('active');
     document.body.style.overflow = '';
 }
 
 function openMenu() {
-    navToggle.classList.add('active');
-    navLinks.classList.add('active');
+    if (navToggle) navToggle.classList.add('active');
+    if (navLinks) navLinks.classList.add('active');
     if (navOverlay) navOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
 }
@@ -397,8 +397,8 @@ const heroContent = document.querySelector('.hero-content');
 
 hero.addEventListener('mousemove', (e) => {
     const rect = hero.getBoundingClientRect();
-    const x = (e.clientX - rect.left - rect.width / 2) / 50;
-    const y = (e.clientY - rect.top - rect.height / 2) / 50;
+    const x = (e.clientX - rect.left - rect.width / 2) / 150;
+    const y = (e.clientY - rect.top - rect.height / 2) / 150;
 
     gsap.to(heroContent, {
         x: x,
@@ -559,7 +559,7 @@ document.addEventListener('keydown', (e) => {
 
 // ===== Timeline Toggle =====
 const timelineToggle = document.getElementById('timelineToggle');
-const hiddenTimelineItems = document.querySelectorAll('.timeline-item.hidden-item');
+const hiddenTimelineItems = document.querySelectorAll('.timeline-hidden-wrapper .timeline-item');
 
 if (timelineToggle && hiddenTimelineItems.length > 0) {
     timelineToggle.addEventListener('click', () => {
@@ -569,6 +569,11 @@ if (timelineToggle && hiddenTimelineItems.length > 0) {
             hiddenTimelineItems.forEach(item => item.classList.remove('show'));
             timelineToggle.classList.remove('active');
             timelineToggle.querySelector('.toggle-text').textContent = 'Show Full Timeline';
+            
+            // Smooth scroll to button after collapse
+            setTimeout(() => {
+                timelineToggle.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 50);
         } else {
             hiddenTimelineItems.forEach(item => item.classList.add('show'));
             timelineToggle.classList.add('active');
@@ -658,3 +663,86 @@ document.addEventListener('mouseleave', () => {
 document.addEventListener('mouseenter', () => {
     cursor.style.opacity = '1';
 });
+
+// ===== Tubelight Navbar =====
+const tubelightItems = document.querySelectorAll('.tubelight-nav-item');
+
+// Update active state on click
+tubelightItems.forEach(item => {
+    item.addEventListener('click', () => {
+        tubelightItems.forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+    });
+});
+
+// Update active state on scroll
+const navSections = document.querySelectorAll('section[id]');
+window.addEventListener('scroll', () => {
+    let current = 'home';
+    const scrollY = window.pageYOffset;
+    
+    navSections.forEach(section => {
+        const sectionTop = section.offsetTop - 200;
+        if (scrollY >= sectionTop) {
+            current = section.getAttribute('id');
+        }
+    });
+    
+    tubelightItems.forEach(item => {
+        item.classList.remove('active');
+        if (item.getAttribute('data-section') === current) {
+            item.classList.add('active');
+        }
+    });
+    
+    // Handle home when at top
+    if (scrollY < 200) {
+        tubelightItems.forEach(item => item.classList.remove('active'));
+        document.querySelector('.tubelight-nav-item[data-section="home"]')?.classList.add('active');
+    }
+});
+
+// ===== Glare Cards Mobile Carousel Dots =====
+const glareCardsContainer = document.querySelector('.glare-cards');
+const glareCardsDots = document.querySelectorAll('.glare-cards-dots .dot');
+
+if (glareCardsContainer && glareCardsDots.length > 0) {
+    function updateGlareDots() {
+        const cards = glareCardsContainer.querySelectorAll('.glare-card');
+        const containerRect = glareCardsContainer.getBoundingClientRect();
+        const containerCenter = containerRect.left + containerRect.width / 2;
+        
+        let activeIndex = 0;
+        let minDistance = Infinity;
+        
+        cards.forEach((card, index) => {
+            const cardRect = card.getBoundingClientRect();
+            const cardCenter = cardRect.left + cardRect.width / 2;
+            const distance = Math.abs(containerCenter - cardCenter);
+            
+            if (distance < minDistance) {
+                minDistance = distance;
+                activeIndex = index;
+            }
+        });
+        
+        glareCardsDots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === activeIndex);
+        });
+    }
+    
+    glareCardsContainer.addEventListener('scroll', updateGlareDots);
+    
+    // Initialize on load
+    updateGlareDots();
+    
+    // Click dots to scroll
+    glareCardsDots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            const card = glareCardsContainer.querySelectorAll('.glare-card')[index];
+            if (card) {
+                card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            }
+        });
+    });
+}

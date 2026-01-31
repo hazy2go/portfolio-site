@@ -22,8 +22,11 @@
 
     <!-- Theme Color (Discord embed accent) -->
     <meta name="theme-color" content="#6366f1">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="profile.jpg">
 
-    <link rel="stylesheet" href="styles.css?v=10">
+    <link rel="stylesheet" href="styles.css?v=37">
     <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,28 +35,36 @@
 <body>
     <!-- Navigation -->
     <div class="nav-overlay"></div>
-    <nav class="nav">
-        <div class="nav-content">
-            <a href="#" class="nav-logo">HT</a>
-            <button class="nav-toggle" aria-label="Toggle menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <div class="nav-links">
-                <a href="#about">About</a>
-                <a href="#experience">Experience</a>
-                <a href="#clients">Clients</a>
-                <a href="#skills">Skills</a>
-                <a href="#contact" class="nav-cta">Get in Touch</a>
-            </div>
+    <!-- Tubelight Navbar -->
+    <nav class="tubelight-nav">
+        <div class="tubelight-nav-inner">
+            <a href="#top" class="tubelight-nav-item active" data-section="home">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <span class="nav-text">Home</span>
+            </a>
+            <a href="#about" class="tubelight-nav-item" data-section="about">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span class="nav-text">About</span>
+            </a>
+            <a href="#experience" class="tubelight-nav-item" data-section="experience">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                <span class="nav-text">Work</span>
+            </a>
+            <a href="#clients" class="tubelight-nav-item" data-section="clients">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <span class="nav-text">Clients</span>
+            </a>
+            <a href="#contact" class="tubelight-nav-item" data-section="contact">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                <span class="nav-text">Contact</span>
+            </a>
+            <div class="tubelight-lamp"></div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-orb hero-orb-1"></div>
-        <div class="hero-orb hero-orb-2"></div>
+    <section class="hero" id="top">
+        <div id="heroGradient" class="hero-gradient-canvas"></div>
         <div class="hero-content">
             <h1 class="hero-title">
                 <span class="title-line typewriter" data-text="Hasan Toprak"></span><span class="cursor">|</span>
@@ -78,7 +89,8 @@
                 </div>
             </div>
         </div>
-        <div class="scroll-indicator">
+        <!-- scroll indicator removed -->
+        <div class="scroll-indicator" style="display: none;">
             <div class="scroll-line"></div>
             <span>Scroll</span>
         </div>
@@ -184,6 +196,15 @@
                 <div class="timeline-item visible">
                     <div class="timeline-marker active"></div>
                     <div class="timeline-content">
+                        <span class="timeline-date">Feb 2025 - Present</span>
+                        <h3>Community Manager</h3>
+                        <span class="timeline-company">SODAX</span>
+                        <p>Building community for cross-chain DeFi platform. Swap, save, and borrow across EVM networks and beyond.</p>
+                    </div>
+                </div>
+                <div class="timeline-item visible">
+                    <div class="timeline-marker active"></div>
+                    <div class="timeline-content">
                         <span class="timeline-date">2024 - Present</span>
                         <h3>Community Manager</h3>
                         <span class="timeline-company">Reign of Titans (AB InBev)</span>
@@ -217,58 +238,60 @@
                         <p>Supporting Solana ecosystem projects in Turkey through targeted launches and community growth initiatives.</p>
                     </div>
                 </div>
-                <div class="timeline-item hidden-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date">Aug 2023 - Dec 2024</span>
-                        <h3>Community Manager</h3>
-                        <span class="timeline-company">Dokyo</span>
-                        <p>Managed community engagement for a prominent NFT project, driving holder retention.</p>
+                <div class="timeline-hidden-wrapper" id="timelineHiddenWrapper">
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <span class="timeline-date">Aug 2023 - Dec 2024</span>
+                            <h3>Community Manager</h3>
+                            <span class="timeline-company">Dokyo</span>
+                            <p>Managed community engagement for a prominent NFT project, driving holder retention.</p>
+                        </div>
                     </div>
-                </div>
-                <div class="timeline-item hidden-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date">Oct 2022 - Apr 2024</span>
-                        <h3>Core Team Member</h3>
-                        <span class="timeline-company">DegenU</span>
-                        <p>Contributed to building Web3's premier educational hub for knowledge-sharing and job placement.</p>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <span class="timeline-date">Oct 2022 - Apr 2024</span>
+                            <h3>Core Team Member</h3>
+                            <span class="timeline-company">DegenU</span>
+                            <p>Contributed to building Web3's premier educational hub for knowledge-sharing and job placement.</p>
+                        </div>
                     </div>
-                </div>
-                <div class="timeline-item hidden-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date">Oct 2022 - Feb 2024</span>
-                        <h3>Community Moderator</h3>
-                        <span class="timeline-company">Rooniverse</span>
-                        <p>Engaged community for a blockchain-powered MOBA game developed with AAA gaming veterans.</p>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <span class="timeline-date">Oct 2022 - Feb 2024</span>
+                            <h3>Community Moderator</h3>
+                            <span class="timeline-company">Rooniverse</span>
+                            <p>Engaged community for a blockchain-powered MOBA game developed with AAA gaming veterans.</p>
+                        </div>
                     </div>
-                </div>
-                <div class="timeline-item hidden-item">
-                    <div class="timeline-marker active"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date">May 2022 - Present</span>
-                        <h3>Community Advisor & Team Manager</h3>
-                        <span class="timeline-company">SOLDecoder</span>
-                        <p>Developing and promoting AI-powered Discord bots enhancing community interactivity.</p>
+                    <div class="timeline-item">
+                        <div class="timeline-marker active"></div>
+                        <div class="timeline-content">
+                            <span class="timeline-date">May 2022 - Present</span>
+                            <h3>Community Advisor & Team Manager</h3>
+                            <span class="timeline-company">SOLDecoder</span>
+                            <p>Developing and promoting AI-powered Discord bots enhancing community interactivity.</p>
+                        </div>
                     </div>
-                </div>
-                <div class="timeline-item hidden-item">
-                    <div class="timeline-marker active"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date">Jan 2022 - Present</span>
-                        <h3>Co-Owner & Project Manager</h3>
-                        <span class="timeline-company">Sisterhood of the Knives</span>
-                        <p>Managing lore-driven NFT project inspired by manga/anime, fostering deep community engagement.</p>
+                    <div class="timeline-item">
+                        <div class="timeline-marker active"></div>
+                        <div class="timeline-content">
+                            <span class="timeline-date">Jan 2022 - Present</span>
+                            <h3>Co-Owner & Project Manager</h3>
+                            <span class="timeline-company">Sisterhood of the Knives</span>
+                            <p>Managing lore-driven NFT project inspired by manga/anime, fostering deep community engagement.</p>
+                        </div>
                     </div>
-                </div>
-                <div class="timeline-item hidden-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date">2022 - 2024</span>
-                        <h3>Additional Roles</h3>
-                        <span class="timeline-company">Various Projects</span>
-                        <p>Community Advisor at Cardboard Citizens, Community Manager at Robo Ramen, Project Lead at GMers, Community Manager at Sovana/1KinLabs.</p>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <span class="timeline-date">2022 - 2024</span>
+                            <h3>Additional Roles</h3>
+                            <span class="timeline-company">Various Projects</span>
+                            <p>Community Advisor at Cardboard Citizens, Community Manager at Robo Ramen, Project Lead at GMers, Community Manager at Sovana/1KinLabs.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -290,33 +313,70 @@
                 <p class="section-subtitle">A few highlights from my portfolio</p>
             </div>
             <div class="clients-carousel">
-                <div class="clients-grid">
-                    <a href="https://reignoftitans.gg/" target="_blank" class="client-card">
-                        <img src="logos/rot.png" alt="Reign of Titans" class="client-logo-img">
-                        <span class="client-name">Reign of Titans</span>
-                        <span class="client-type">AB InBev</span>
+                <div class="glare-cards">
+                    <a href="https://www.sodax.com" target="_blank" class="glare-card">
+                        <div class="glare-card-inner">
+                            <div class="glare-card-content">
+                                <img src="logos/sodax.jpg" alt="SODAX" class="client-logo-img">
+                                <span class="client-name">SODAX</span>
+                                <span class="client-type">Cross-chain DeFi</span>
+                            </div>
+                            <div class="glare-card-glare"></div>
+                            <div class="glare-card-foil"></div>
+                        </div>
                     </a>
-                    <a href="https://superteam.fun" target="_blank" class="client-card">
-                        <img src="logos/superteam.jpg" alt="Superteam" class="client-logo-img">
-                        <span class="client-name">Superteam</span>
-                        <span class="client-type">Solana Ecosystem</span>
+                    <a href="https://reignoftitans.gg/" target="_blank" class="glare-card">
+                        <div class="glare-card-inner">
+                            <div class="glare-card-content">
+                                <img src="logos/rot.png" alt="Reign of Titans" class="client-logo-img">
+                                <span class="client-name">Reign of Titans</span>
+                                <span class="client-type">AB InBev</span>
+                            </div>
+                            <div class="glare-card-glare"></div>
+                            <div class="glare-card-foil"></div>
+                        </div>
                     </a>
-                    <a href="https://www.pathfinders.gg/" target="_blank" class="client-card">
-                        <img src="logos/pathfinders.svg" alt="Pathfinders" class="client-logo-img">
-                        <span class="client-name">Pathfinders</span>
-                        <span class="client-type">LST-NFT</span>
+                    <a href="https://superteam.fun" target="_blank" class="glare-card">
+                        <div class="glare-card-inner">
+                            <div class="glare-card-content">
+                                <img src="logos/superteam.jpg" alt="Superteam" class="client-logo-img">
+                                <span class="client-name">Superteam</span>
+                                <span class="client-type">Solana Ecosystem</span>
+                            </div>
+                            <div class="glare-card-glare"></div>
+                            <div class="glare-card-foil"></div>
+                        </div>
                     </a>
-                    <a href="https://linktr.ee/SOL_Decoder" target="_blank" class="client-card">
-                        <img src="logos/soldecoder.jpeg" alt="SOLDecoder" class="client-logo-img">
-                        <span class="client-name">SOLDecoder</span>
-                        <span class="client-type">AI & DeFi Tools</span>
+                    <a href="https://www.pathfinders.gg/" target="_blank" class="glare-card">
+                        <div class="glare-card-inner">
+                            <div class="glare-card-content">
+                                <img src="logos/pathfinders.png" alt="Pathfinders" class="client-logo-img">
+                                <span class="client-name">Pathfinders</span>
+                                <span class="client-type">LST-NFT</span>
+                            </div>
+                            <div class="glare-card-glare"></div>
+                            <div class="glare-card-foil"></div>
+                        </div>
+                    </a>
+                    <a href="https://linktr.ee/SOL_Decoder" target="_blank" class="glare-card">
+                        <div class="glare-card-inner">
+                            <div class="glare-card-content">
+                                <img src="logos/soldecoder.jpeg" alt="SOLDecoder" class="client-logo-img">
+                                <span class="client-name">SOLDecoder</span>
+                                <span class="client-type">AI & DeFi Tools</span>
+                            </div>
+                            <div class="glare-card-glare"></div>
+                            <div class="glare-card-foil"></div>
+                        </div>
                     </a>
                 </div>
-                <div class="clients-dots">
+                <!-- Mobile carousel dots -->
+                <div class="glare-cards-dots">
                     <span class="dot active" data-index="0"></span>
                     <span class="dot" data-index="1"></span>
                     <span class="dot" data-index="2"></span>
                     <span class="dot" data-index="3"></span>
+                    <span class="dot" data-index="4"></span>
                 </div>
             </div>
         </div>
@@ -544,8 +604,11 @@
         <div class="mobile-scroll-thumb"></div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <script src="script.js?v=6"></script>
+    <script src="flow-gradient.js?v=4"></script>
+    <script src="glare-cards.js?v=1"></script>
+    <script src="script.js?v=17"></script>
 </body>
 </html>
