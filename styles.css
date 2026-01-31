@@ -15,6 +15,21 @@
     --border-subtle: #1a1a1a;
 }
 
+/* ===== Animated Gradient Background ===== */
+.animated-gradient-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.animated-gradient-inner {
+    position: absolute;
+    inset: -20%;
+    transition: transform 0.1s ease-out;
+}
+
 /* ===== Reset & Base ===== */
 *, *::before, *::after {
     margin: 0;
@@ -176,7 +191,7 @@ body {
     width: 900px;
     height: 900px;
     background: radial-gradient(circle, var(--accent-glow) 0%, transparent 60%);
-    opacity: 0.4;
+    opacity: 0.15; /* Reduced - animated gradient is now primary effect */
     pointer-events: none;
     animation: heroPulse 8s ease-in-out infinite;
 }
@@ -192,6 +207,7 @@ body {
     filter: blur(80px);
     pointer-events: none;
     animation: orbFloat 10s ease-in-out infinite;
+    display: none; /* Hidden - using animated gradient instead */
 }
 
 .hero-orb-1 {
