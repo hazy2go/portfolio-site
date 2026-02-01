@@ -1,6 +1,6 @@
 /**
  * Flow Gradient Background - Three.js
- * Calming blue animated gradient with mouse interaction
+ * Warm rust/cream animated gradient with mouse interaction
  */
 
 class TouchTexture {
@@ -84,27 +84,36 @@ class FlowGradient {
     this.camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 10000);
     this.camera.position.z = 50;
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x0a0e27);
+    // Warm midnight background (#12110f)
+    this.scene.background = new THREE.Color(0x12110f);
     this.clock = new THREE.Clock();
     this.touchTexture = new TouchTexture();
+    
+    // Warm color palette matching the design
+    // rust: #c45c3e → rgb(196, 92, 62) → normalized (0.77, 0.36, 0.24)
+    // rust-light: #d4735a → rgb(212, 115, 90) → normalized (0.83, 0.45, 0.35)
+    // gold: #c9a55c → rgb(201, 165, 92) → normalized (0.79, 0.65, 0.36)
+    // sage: #5a6b5c → rgb(90, 107, 92) → normalized (0.35, 0.42, 0.36)
+    // cream-dark: #2d2a26 → rgb(45, 42, 38) → normalized (0.18, 0.16, 0.15)
+    // midnight: #12110f → rgb(18, 17, 15) → normalized (0.07, 0.067, 0.059)
     
     this.uniforms = {
       uTime: { value: 0 },
       uResolution: { value: new THREE.Vector2(width, height) },
-      uColor1: { value: new THREE.Vector3(0.15, 0.35, 0.55) },
-      uColor2: { value: new THREE.Vector3(0.039, 0.055, 0.153) },
-      uColor3: { value: new THREE.Vector3(0.1, 0.25, 0.45) },
-      uColor4: { value: new THREE.Vector3(0.039, 0.055, 0.153) },
-      uColor5: { value: new THREE.Vector3(0.12, 0.30, 0.50) },
-      uColor6: { value: new THREE.Vector3(0.039, 0.055, 0.153) },
-      uSpeed: { value: 0.8 },
-      uIntensity: { value: 1.3 },
+      uColor1: { value: new THREE.Vector3(0.77, 0.36, 0.24) },    // rust
+      uColor2: { value: new THREE.Vector3(0.18, 0.16, 0.15) },    // ink-soft
+      uColor3: { value: new THREE.Vector3(0.83, 0.45, 0.35) },    // rust-light
+      uColor4: { value: new THREE.Vector3(0.12, 0.11, 0.09) },    // midnight deeper
+      uColor5: { value: new THREE.Vector3(0.79, 0.65, 0.36) },    // gold
+      uColor6: { value: new THREE.Vector3(0.15, 0.14, 0.12) },    // dark warm
+      uSpeed: { value: 0.6 },
+      uIntensity: { value: 1.1 },
       uTouchTexture: { value: this.touchTexture.texture },
-      uGrainIntensity: { value: 0.03 },
-      uDarkNavy: { value: new THREE.Vector3(0.039, 0.055, 0.153) },
-      uGradientSize: { value: 0.45 },
-      uColor1Weight: { value: 0.35 },
-      uColor2Weight: { value: 1.2 }
+      uGrainIntensity: { value: 0.04 },
+      uDarkBase: { value: new THREE.Vector3(0.07, 0.067, 0.059) }, // midnight
+      uGradientSize: { value: 0.5 },
+      uColor1Weight: { value: 0.4 },
+      uColor2Weight: { value: 1.0 }
     };
     
     this.init();
@@ -129,7 +138,7 @@ class FlowGradient {
       fragmentShader: `
         uniform float uTime, uSpeed, uIntensity, uGrainIntensity, uGradientSize, uColor1Weight, uColor2Weight;
         uniform vec2 uResolution;
-        uniform vec3 uColor1, uColor2, uColor3, uColor4, uColor5, uColor6, uDarkNavy;
+        uniform vec3 uColor1, uColor2, uColor3, uColor4, uColor5, uColor6, uDarkBase;
         uniform sampler2D uTouchTexture;
         varying vec2 vUv;
         
@@ -138,12 +147,13 @@ class FlowGradient {
         }
         
         vec3 getGradientColor(vec2 uv, float time) {
-          vec2 c1 = vec2(0.5 + sin(time * uSpeed * 0.4) * 0.4, 0.5 + cos(time * uSpeed * 0.5) * 0.4);
-          vec2 c2 = vec2(0.5 + cos(time * uSpeed * 0.6) * 0.5, 0.5 + sin(time * uSpeed * 0.45) * 0.5);
-          vec2 c3 = vec2(0.5 + sin(time * uSpeed * 0.35) * 0.45, 0.5 + cos(time * uSpeed * 0.55) * 0.45);
-          vec2 c4 = vec2(0.5 + cos(time * uSpeed * 0.5) * 0.4, 0.5 + sin(time * uSpeed * 0.4) * 0.4);
-          vec2 c5 = vec2(0.5 + sin(time * uSpeed * 0.7) * 0.35, 0.5 + cos(time * uSpeed * 0.6) * 0.35);
-          vec2 c6 = vec2(0.5 + cos(time * uSpeed * 0.45) * 0.5, 0.5 + sin(time * uSpeed * 0.65) * 0.5);
+          // Slower, more organic movement
+          vec2 c1 = vec2(0.5 + sin(time * uSpeed * 0.3) * 0.45, 0.5 + cos(time * uSpeed * 0.4) * 0.45);
+          vec2 c2 = vec2(0.5 + cos(time * uSpeed * 0.5) * 0.5, 0.5 + sin(time * uSpeed * 0.35) * 0.5);
+          vec2 c3 = vec2(0.5 + sin(time * uSpeed * 0.25) * 0.4, 0.5 + cos(time * uSpeed * 0.45) * 0.4);
+          vec2 c4 = vec2(0.5 + cos(time * uSpeed * 0.4) * 0.45, 0.5 + sin(time * uSpeed * 0.3) * 0.45);
+          vec2 c5 = vec2(0.5 + sin(time * uSpeed * 0.55) * 0.35, 0.5 + cos(time * uSpeed * 0.5) * 0.35);
+          vec2 c6 = vec2(0.5 + cos(time * uSpeed * 0.35) * 0.5, 0.5 + sin(time * uSpeed * 0.55) * 0.5);
           
           float i1 = 1.0 - smoothstep(0.0, uGradientSize, length(uv - c1));
           float i2 = 1.0 - smoothstep(0.0, uGradientSize, length(uv - c2));
@@ -153,30 +163,35 @@ class FlowGradient {
           float i6 = 1.0 - smoothstep(0.0, uGradientSize, length(uv - c6));
           
           vec3 color = vec3(0.0);
-          color += uColor1 * i1 * (0.55 + 0.45 * sin(time * uSpeed)) * uColor1Weight;
-          color += uColor2 * i2 * (0.55 + 0.45 * cos(time * uSpeed * 1.2)) * uColor2Weight;
-          color += uColor3 * i3 * (0.55 + 0.45 * sin(time * uSpeed * 0.8)) * uColor1Weight;
-          color += uColor4 * i4 * (0.55 + 0.45 * cos(time * uSpeed * 1.3)) * uColor2Weight;
-          color += uColor5 * i5 * (0.55 + 0.45 * sin(time * uSpeed * 1.1)) * uColor1Weight;
-          color += uColor6 * i6 * (0.55 + 0.45 * cos(time * uSpeed * 0.9)) * uColor2Weight;
+          color += uColor1 * i1 * (0.5 + 0.5 * sin(time * uSpeed * 0.8)) * uColor1Weight;
+          color += uColor2 * i2 * (0.5 + 0.5 * cos(time * uSpeed * 1.0)) * uColor2Weight;
+          color += uColor3 * i3 * (0.5 + 0.5 * sin(time * uSpeed * 0.6)) * uColor1Weight;
+          color += uColor4 * i4 * (0.5 + 0.5 * cos(time * uSpeed * 1.1)) * uColor2Weight;
+          color += uColor5 * i5 * (0.5 + 0.5 * sin(time * uSpeed * 0.9)) * uColor1Weight * 0.7;
+          color += uColor6 * i6 * (0.5 + 0.5 * cos(time * uSpeed * 0.7)) * uColor2Weight;
           
           color = clamp(color, vec3(0.0), vec3(1.0)) * uIntensity;
+          
+          // Warm tone adjustment
           float lum = dot(color, vec3(0.299, 0.587, 0.114));
-          color = mix(vec3(lum), color, 1.35);
-          color = pow(color, vec3(0.92));
+          color = mix(vec3(lum), color, 1.4);
+          color = pow(color, vec3(0.95));
+          
+          // Blend with warm dark base
           float brightness = length(color);
-          color = mix(uDarkNavy, color, max(brightness * 1.2, 0.15));
+          color = mix(uDarkBase, color, max(brightness * 1.3, 0.1));
+          
           return color;
         }
         
         void main() {
           vec2 uv = vUv;
           vec4 touchTex = texture2D(uTouchTexture, uv);
-          uv.x -= (touchTex.r * 2.0 - 1.0) * 0.3 * touchTex.b;
-          uv.y -= (touchTex.g * 2.0 - 1.0) * 0.3 * touchTex.b;
+          uv.x -= (touchTex.r * 2.0 - 1.0) * 0.25 * touchTex.b;
+          uv.y -= (touchTex.g * 2.0 - 1.0) * 0.25 * touchTex.b;
           vec2 center = vec2(0.5);
           float dist = length(uv - center);
-          float ripple = sin(dist * 20.0 - uTime * 3.0) * 0.015 * touchTex.b;
+          float ripple = sin(dist * 15.0 - uTime * 2.5) * 0.012 * touchTex.b;
           uv += vec2(ripple);
           vec3 color = getGradientColor(uv, uTime);
           color += grain(uv, uTime) * uGrainIntensity;
