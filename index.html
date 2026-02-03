@@ -1357,6 +1357,14 @@
         background: var(--paper);
         border-radius: 12px;
         overflow: hidden;
+        position: relative;
+    }
+
+    .calendly-close {
+        top: 12px;
+        left: 12px;
+        right: auto;
+        z-index: 10;
     }
 
     .calendly-inline-widget {
@@ -2162,7 +2170,7 @@
 <div class="modal" id="calendlyModal">
     <div class="modal-overlay"></div>
     <div class="modal-content calendly-modal-content">
-        <button class="modal-close" id="closeCalendlyModal" aria-label="Close calendar modal">
+        <button class="modal-close calendly-close" id="closeCalendlyModal" aria-label="Close calendar modal">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M18 6L6 18M6 6l12 12"/>
             </svg>
