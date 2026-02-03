@@ -971,6 +971,8 @@
     .skills {
         padding: var(--space-xl) 8vw;
         background: var(--paper);
+        position: relative;
+        overflow: hidden;
     }
 
     .skills-header {
@@ -1095,6 +1097,8 @@
     .contact {
         padding: var(--space-xl) 8vw;
         background: var(--paper);
+        position: relative;
+        overflow: hidden;
     }
 
     .contact-wrapper {
@@ -1533,12 +1537,321 @@
     .reveal-delay-1 { transition-delay: 0.1s; }
     .reveal-delay-2 { transition-delay: 0.2s; }
     .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* ═══════════════════════════════════════
+       ENHANCEMENT 1: Hero Staggered Word Reveal
+    ═══════════════════════════════════════ */
+    .hero-title-right .word {
+        display: inline-block;
+        opacity: 0;
+        transform: translateY(40px) rotateX(-15deg);
+        animation: wordReveal 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    }
+
+    .hero-title-right .word:nth-child(1) { animation-delay: 0.1s; }
+    .hero-title-right .word:nth-child(2) { animation-delay: 0.25s; }
+    .hero-title-right .word:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes wordReveal {
+        to {
+            opacity: 1;
+            transform: translateY(0) rotateX(0);
+        }
+    }
+
+    /* Gradient text effect on "communities" */
+    .hero-title-right em {
+        background: linear-gradient(135deg, var(--rust-light) 0%, var(--gold) 50%, var(--rust-light) 100%);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: gradientShift 4s ease-in-out infinite;
+    }
+
+    @keyframes gradientShift {
+        0%, 100% { background-position: 0% center; }
+        50% { background-position: 100% center; }
+    }
+
+    /* ═══════════════════════════════════════
+       ENHANCEMENT 2: Client Cards Shimmer
+    ═══════════════════════════════════════ */
+    .glare-card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            105deg,
+            transparent 40%,
+            rgba(255, 255, 255, 0.15) 45%,
+            rgba(255, 255, 255, 0.3) 50%,
+            rgba(255, 255, 255, 0.15) 55%,
+            transparent 60%
+        );
+        transform: translateX(-100%);
+        border-radius: var(--radius);
+        z-index: 10;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .glare-card:hover::before {
+        opacity: 1;
+        animation: shimmer 1.5s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+    }
+
+    .glare-card:hover {
+        transform: translateY(-8px) scale(1.02);
+    }
+
+    .glare-card:hover .glare-card-inner {
+        box-shadow: 0 20px 40px rgba(196, 92, 62, 0.2);
+    }
+
+    /* ═══════════════════════════════════════
+       ENHANCEMENT 3: Timeline Redesign
+    ═══════════════════════════════════════ */
+    .timeline::before {
+        width: 3px;
+        background: linear-gradient(
+            to bottom,
+            var(--rust) 0%,
+            var(--gold) 30%,
+            var(--rust) 60%,
+            var(--cream) 100%
+        );
+        border-radius: 2px;
+    }
+
+    .timeline-marker {
+        width: 16px;
+        height: 16px;
+        left: -7px;
+        background: var(--paper-dark);
+        border: 3px solid var(--cream);
+    }
+
+    .timeline-marker::before {
+        content: '';
+        position: absolute;
+        inset: 2px;
+        background: var(--cream);
+        border-radius: 50%;
+        transition: all 0.3s ease;
+    }
+
+    .timeline-item.active .timeline-marker {
+        border-color: var(--rust);
+        box-shadow: 0 0 0 6px rgba(196, 92, 62, 0.12);
+    }
+
+    .timeline-item.active .timeline-marker::before {
+        background: var(--rust);
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(0.6); opacity: 0.7; }
+    }
+
+    .timeline-card {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .timeline-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, transparent 60%, rgba(196, 92, 62, 0.03) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .timeline-card:hover::before {
+        opacity: 1;
+    }
+
+    /* ═══════════════════════════════════════
+       ENHANCEMENT 4: Impact Section Redesign
+    ═══════════════════════════════════════ */
+    .impact {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .impact::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+            ellipse at 30% 20%,
+            rgba(196, 92, 62, 0.15) 0%,
+            transparent 50%
+        );
+        pointer-events: none;
+    }
+
+    .impact-number {
+        font-size: clamp(3.5rem, 8vw, 5rem);
+        background: linear-gradient(180deg, var(--rust-light) 0%, var(--gold) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+    }
+
+    .impact-suffix {
+        font-size: 2rem;
+        vertical-align: super;
+        background: linear-gradient(180deg, var(--rust-light) 0%, var(--gold) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .impact-item {
+        position: relative;
+        padding: 1.5rem 1rem;
+    }
+
+    .impact-item::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 120px;
+        height: 120px;
+        background: radial-gradient(circle, rgba(196, 92, 62, 0.1) 0%, transparent 70%);
+        border-radius: 50%;
+        opacity: 0;
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .impact-item:hover::before {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.5);
+    }
+
+    /* ═══════════════════════════════════════
+       ENHANCEMENT 5: Custom Cursor & Decorative Elements
+    ═══════════════════════════════════════ */
+    @media (min-width: 769px) {
+        body {
+            cursor: none;
+        }
+
+        a, button, .glare-card {
+            cursor: none;
+        }
+    }
+
+    .cursor {
+        display: none;
+    }
+
+    @media (min-width: 769px) {
+        .cursor {
+            display: block;
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            background: var(--rust);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.15s ease, width 0.2s ease, height 0.2s ease, background 0.2s ease;
+            mix-blend-mode: difference;
+        }
+
+        .cursor.hovering {
+            width: 40px;
+            height: 40px;
+            background: var(--paper);
+            mix-blend-mode: difference;
+        }
+
+        .cursor-trail {
+            display: block;
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            border: 1px solid var(--rust);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99998;
+            transform: translate(-50%, -50%);
+            transition: transform 0.3s ease-out, opacity 0.3s ease;
+            opacity: 0.5;
+        }
+    }
+
+    /* Decorative geometric elements */
+    .geo-element {
+        position: absolute;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .geo-circle {
+        width: 300px;
+        height: 300px;
+        border: 1px solid rgba(196, 92, 62, 0.1);
+        border-radius: 50%;
+    }
+
+    .geo-dots {
+        width: 100px;
+        height: 100px;
+        background-image: radial-gradient(var(--rust) 1px, transparent 1px);
+        background-size: 10px 10px;
+        opacity: 0.15;
+    }
+
+    .about .geo-circle {
+        top: 10%;
+        right: -100px;
+    }
+
+    .about .geo-dots {
+        bottom: 20%;
+        left: 5%;
+    }
+
+    .skills .geo-circle {
+        bottom: -100px;
+        left: -100px;
+    }
+
+    .contact .geo-dots {
+        top: 20%;
+        right: 10%;
+    }
 </style>
 
 
 </head>
 <body>
 
+<!-- Custom Cursor -->
+<div class="cursor"></div>
+<div class="cursor-trail"></div>
 
 <!-- Navigation -->
 <nav class="nav">
@@ -1556,7 +1869,7 @@
     <div class="hero-right">
         <div id="heroGradient"></div>
         <div class="hero-headline">
-            <h1 class="hero-title-right">Building<br><em>communities</em><br>that last</h1>
+            <h1 class="hero-title-right"><span class="word">Building</span><br><span class="word"><em>communities</em></span><br><span class="word">that last</span></h1>
         </div>
     </div>
 </section>
@@ -1579,6 +1892,8 @@
 
 <!-- About -->
 <section class="about" id="about">
+    <div class="geo-element geo-circle"></div>
+    <div class="geo-element geo-dots"></div>
     <div class="about-image reveal">
         <img src="profile.jpg" alt="Hasan Toprak">
     </div>
@@ -1764,6 +2079,7 @@
 
 <!-- Skills -->
 <section class="skills" id="skills">
+    <div class="geo-element geo-circle"></div>
     <div class="skills-header reveal">
         <span class="section-eyebrow">Capabilities</span>
         <h2 class="section-title">What I bring to the table</h2>
@@ -1835,6 +2151,7 @@
 
 <!-- Contact -->
 <section class="contact" id="contact">
+    <div class="geo-element geo-dots"></div>
     <div class="contact-wrapper reveal">
         <span class="section-eyebrow">Get in touch</span>
         <h2 class="section-title">Let's build something together</h2>
@@ -2101,6 +2418,51 @@
             if (calendlyModal?.classList.contains('active')) closeModal(calendlyModal);
         }
     });
+
+    // ═══════════════════════════════════════
+    // Custom Cursor (Desktop only)
+    // ═══════════════════════════════════════
+    const cursor = document.querySelector('.cursor');
+    const cursorTrail = document.querySelector('.cursor-trail');
+
+    if (window.innerWidth > 768 && cursor && cursorTrail) {
+        let mouseX = 0, mouseY = 0;
+        let trailX = 0, trailY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            cursor.style.left = mouseX + 'px';
+            cursor.style.top = mouseY + 'px';
+        });
+
+        // Smooth trail follow
+        function animateTrail() {
+            trailX += (mouseX - trailX) * 0.15;
+            trailY += (mouseY - trailY) * 0.15;
+            cursorTrail.style.left = trailX + 'px';
+            cursorTrail.style.top = trailY + 'px';
+            requestAnimationFrame(animateTrail);
+        }
+        animateTrail();
+
+        // Hover effect on interactive elements
+        const hoverTargets = document.querySelectorAll('a, button, .glare-card, .social-link, .btn');
+        hoverTargets.forEach(target => {
+            target.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
+            target.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
+        });
+
+        // Hide cursor when leaving window
+        document.addEventListener('mouseleave', () => {
+            cursor.style.opacity = '0';
+            cursorTrail.style.opacity = '0';
+        });
+        document.addEventListener('mouseenter', () => {
+            cursor.style.opacity = '1';
+            cursorTrail.style.opacity = '0.5';
+        });
+    }
 </script>
 
 
