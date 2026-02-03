@@ -1742,61 +1742,6 @@
         transform: translate(-50%, -50%) scale(1.5);
     }
 
-    /* ═══════════════════════════════════════
-       ENHANCEMENT 5: Custom Cursor & Decorative Elements
-    ═══════════════════════════════════════ */
-    @media (min-width: 769px) {
-        body {
-            cursor: none;
-        }
-
-        a, button, .glare-card {
-            cursor: none;
-        }
-    }
-
-    .cursor {
-        display: none;
-    }
-
-    @media (min-width: 769px) {
-        .cursor {
-            display: block;
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 12px;
-            height: 12px;
-            background: var(--rust);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 99999;
-            will-change: transform;
-            mix-blend-mode: difference;
-        }
-
-        .cursor.hovering {
-            width: 40px;
-            height: 40px;
-            background: var(--paper);
-        }
-
-        .cursor-trail {
-            display: block;
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 30px;
-            height: 30px;
-            border: 1px solid var(--rust);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 99998;
-            will-change: transform;
-            opacity: 0.4;
-        }
-    }
-
     /* Decorative geometric elements */
     .geo-element {
         position: absolute;
@@ -1843,10 +1788,6 @@
 
 </head>
 <body>
-
-<!-- Custom Cursor -->
-<div class="cursor"></div>
-<div class="cursor-trail"></div>
 
 <!-- Navigation -->
 <nav class="nav">
@@ -2416,48 +2357,6 @@
         }
     });
 
-    // ═══════════════════════════════════════
-    // Custom Cursor (Desktop only) - GPU accelerated
-    // ═══════════════════════════════════════
-    const cursor = document.querySelector('.cursor');
-    const cursorTrail = document.querySelector('.cursor-trail');
-
-    if (window.innerWidth > 768 && cursor && cursorTrail) {
-        let mouseX = 0, mouseY = 0;
-        let trailX = 0, trailY = 0;
-
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            cursor.style.transform = `translate(${mouseX - 6}px, ${mouseY - 6}px)`;
-        }, { passive: true });
-
-        // Smooth trail follow with GPU transform
-        function animateTrail() {
-            trailX += (mouseX - trailX) * 0.12;
-            trailY += (mouseY - trailY) * 0.12;
-            cursorTrail.style.transform = `translate(${trailX - 15}px, ${trailY - 15}px)`;
-            requestAnimationFrame(animateTrail);
-        }
-        animateTrail();
-
-        // Hover effect on interactive elements
-        const hoverTargets = document.querySelectorAll('a, button, .glare-card, .social-link, .btn');
-        hoverTargets.forEach(target => {
-            target.addEventListener('mouseenter', () => cursor.classList.add('hovering'), { passive: true });
-            target.addEventListener('mouseleave', () => cursor.classList.remove('hovering'), { passive: true });
-        });
-
-        // Hide cursor when leaving window
-        document.addEventListener('mouseleave', () => {
-            cursor.style.opacity = '0';
-            cursorTrail.style.opacity = '0';
-        });
-        document.addEventListener('mouseenter', () => {
-            cursor.style.opacity = '1';
-            cursorTrail.style.opacity = '0.4';
-        });
-    }
 </script>
 
 
