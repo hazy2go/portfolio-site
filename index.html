@@ -68,6 +68,11 @@
     html {
         scroll-behavior: smooth;
         font-size: 16px;
+        overflow-x: hidden;
+    }
+
+    html, body {
+        max-width: 100vw;
     }
 
     body {
@@ -1790,6 +1795,13 @@
     .contact .geo-dots {
         top: 20%;
         right: 10%;
+    }
+
+    /* Hide decorative elements on mobile to prevent overflow */
+    @media (max-width: 768px) {
+        .geo-element {
+            display: none;
+        }
     }
 </style>
 
