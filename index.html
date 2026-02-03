@@ -1541,10 +1541,41 @@
     .reveal-delay-3 { transition-delay: 0.3s; }
 
     /* ═══════════════════════════════════════
-       ENHANCEMENT 1: Hero - Simple fade up (original)
+       ENHANCEMENT 1: Hero - Subtle glow pulse
     ═══════════════════════════════════════ */
-    .hero-title-right .word {
-        display: inline;
+    .hero-headline {
+        position: relative;
+    }
+
+    .hero-headline::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 280px;
+        height: 280px;
+        background: radial-gradient(circle, rgba(196, 92, 62, 0.25) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: glowPulse 4s ease-in-out infinite;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .hero-title-right {
+        position: relative;
+        z-index: 1;
+    }
+
+    @keyframes glowPulse {
+        0%, 100% {
+            opacity: 0.4;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        50% {
+            opacity: 0.7;
+            transform: translate(-50%, -50%) scale(1.15);
+        }
     }
 
     /* ═══════════════════════════════════════
