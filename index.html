@@ -783,6 +783,8 @@
         transition: transform var(--duration) var(--easing);
         aspect-ratio: 1;
         cursor: pointer;
+        overflow: hidden;
+        border-radius: var(--radius);
     }
 
     .glare-card-inner {
@@ -1539,39 +1541,10 @@
     .reveal-delay-3 { transition-delay: 0.3s; }
 
     /* ═══════════════════════════════════════
-       ENHANCEMENT 1: Hero Staggered Word Reveal
+       ENHANCEMENT 1: Hero - Simple fade up (original)
     ═══════════════════════════════════════ */
     .hero-title-right .word {
-        display: inline-block;
-        opacity: 0;
-        transform: translateY(40px) rotateX(-15deg);
-        animation: wordReveal 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
-    }
-
-    .hero-title-right .word:nth-child(1) { animation-delay: 0.1s; }
-    .hero-title-right .word:nth-child(2) { animation-delay: 0.25s; }
-    .hero-title-right .word:nth-child(3) { animation-delay: 0.4s; }
-
-    @keyframes wordReveal {
-        to {
-            opacity: 1;
-            transform: translateY(0) rotateX(0);
-        }
-    }
-
-    /* Gradient text effect on "communities" */
-    .hero-title-right em {
-        background: linear-gradient(135deg, var(--rust-light) 0%, var(--gold) 50%, var(--rust-light) 100%);
-        background-size: 200% auto;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        animation: gradientShift 4s ease-in-out infinite;
-    }
-
-    @keyframes gradientShift {
-        0%, 100% { background-position: 0% center; }
-        50% { background-position: 100% center; }
+        display: inline;
     }
 
     /* ═══════════════════════════════════════
@@ -1769,14 +1742,15 @@
         .cursor {
             display: block;
             position: fixed;
+            left: 0;
+            top: 0;
             width: 12px;
             height: 12px;
             background: var(--rust);
             border-radius: 50%;
             pointer-events: none;
             z-index: 99999;
-            transform: translate(-50%, -50%);
-            transition: transform 0.15s ease, width 0.2s ease, height 0.2s ease, background 0.2s ease;
+            will-change: transform;
             mix-blend-mode: difference;
         }
 
@@ -1784,21 +1758,21 @@
             width: 40px;
             height: 40px;
             background: var(--paper);
-            mix-blend-mode: difference;
         }
 
         .cursor-trail {
             display: block;
             position: fixed;
+            left: 0;
+            top: 0;
             width: 30px;
             height: 30px;
             border: 1px solid var(--rust);
             border-radius: 50%;
             pointer-events: none;
             z-index: 99998;
-            transform: translate(-50%, -50%);
-            transition: transform 0.3s ease-out, opacity 0.3s ease;
-            opacity: 0.5;
+            will-change: transform;
+            opacity: 0.4;
         }
     }
 
@@ -1869,7 +1843,7 @@
     <div class="hero-right">
         <div id="heroGradient"></div>
         <div class="hero-headline">
-            <h1 class="hero-title-right"><span class="word">Building</span><br><span class="word"><em>communities</em></span><br><span class="word">that last</span></h1>
+            <h1 class="hero-title-right">Building<br><em>communities</em><br>that last</h1>
         </div>
     </div>
 </section>
@@ -2420,7 +2394,7 @@
     });
 
     // ═══════════════════════════════════════
-    // Custom Cursor (Desktop only)
+    // Custom Cursor (Desktop only) - GPU accelerated
     // ═══════════════════════════════════════
     const cursor = document.querySelector('.cursor');
     const cursorTrail = document.querySelector('.cursor-trail');
@@ -2432,16 +2406,14 @@
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
-            cursor.style.left = mouseX + 'px';
-            cursor.style.top = mouseY + 'px';
-        });
+            cursor.style.transform = `translate(${mouseX - 6}px, ${mouseY - 6}px)`;
+        }, { passive: true });
 
-        // Smooth trail follow
+        // Smooth trail follow with GPU transform
         function animateTrail() {
-            trailX += (mouseX - trailX) * 0.15;
-            trailY += (mouseY - trailY) * 0.15;
-            cursorTrail.style.left = trailX + 'px';
-            cursorTrail.style.top = trailY + 'px';
+            trailX += (mouseX - trailX) * 0.12;
+            trailY += (mouseY - trailY) * 0.12;
+            cursorTrail.style.transform = `translate(${trailX - 15}px, ${trailY - 15}px)`;
             requestAnimationFrame(animateTrail);
         }
         animateTrail();
@@ -2449,8 +2421,8 @@
         // Hover effect on interactive elements
         const hoverTargets = document.querySelectorAll('a, button, .glare-card, .social-link, .btn');
         hoverTargets.forEach(target => {
-            target.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
-            target.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
+            target.addEventListener('mouseenter', () => cursor.classList.add('hovering'), { passive: true });
+            target.addEventListener('mouseleave', () => cursor.classList.remove('hovering'), { passive: true });
         });
 
         // Hide cursor when leaving window
@@ -2460,7 +2432,7 @@
         });
         document.addEventListener('mouseenter', () => {
             cursor.style.opacity = '1';
-            cursorTrail.style.opacity = '0.5';
+            cursorTrail.style.opacity = '0.4';
         });
     }
 </script>
