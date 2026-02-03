@@ -755,9 +755,10 @@
     }
 
     .glare-cards {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        gap: 1.5rem;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: center;
+        gap: 1rem;
         max-width: 1000px;
         margin: 0 auto;
     }
@@ -774,6 +775,8 @@
         --radius: 8px;
         --easing: ease;
         
+        flex: 0 0 auto;
+        width: 160px;
         position: relative;
         isolation: isolate;
         perspective: 600px;
@@ -1394,8 +1397,11 @@
         }
 
         .glare-cards {
-            grid-template-columns: repeat(5, 1fr);
-            max-width: 850px;
+            gap: 0.75rem;
+        }
+        
+        .glare-card {
+            width: 140px;
         }
 
         .skills-grid {
