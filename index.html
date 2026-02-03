@@ -1553,11 +1553,11 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 280px;
-        height: 280px;
-        background: radial-gradient(circle, rgba(196, 92, 62, 0.25) 0%, transparent 70%);
+        width: 350px;
+        height: 350px;
+        background: radial-gradient(circle, rgba(212, 115, 90, 0.5) 0%, rgba(196, 92, 62, 0.2) 40%, transparent 70%);
         border-radius: 50%;
-        animation: glowPulse 4s ease-in-out infinite;
+        animation: glowPulse 3s ease-in-out infinite;
         pointer-events: none;
         z-index: 0;
     }
@@ -1569,12 +1569,12 @@
 
     @keyframes glowPulse {
         0%, 100% {
-            opacity: 0.4;
+            opacity: 0.6;
             transform: translate(-50%, -50%) scale(1);
         }
         50% {
-            opacity: 0.7;
-            transform: translate(-50%, -50%) scale(1.15);
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.2);
         }
     }
 
