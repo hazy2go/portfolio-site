@@ -1868,6 +1868,8 @@
         font-family: 'Nunito Sans', sans-serif;
         font-size: 0.95rem;
         line-height: 1.65;
+        opacity: 0;
+        will-change: opacity, transform;
     }
 
     .manifesto-caption-top {
@@ -2477,6 +2479,8 @@
         const hand = manifesto.querySelector('.manifesto-hand');
         const glow = manifesto.querySelector('.manifesto-glow');
         const tagline = manifesto.querySelector('.manifesto-tagline');
+        const captionTop = manifesto.querySelector('.manifesto-caption-top');
+        const captionBottom = manifesto.querySelector('.manifesto-caption-bottom');
 
         const clamp = (v, a, b) => Math.min(Math.max(v, a), b);
         const lerp = (a, b, t) => a + (b - a) * t;
@@ -2508,6 +2512,7 @@
             const glowScale = lerp(0.7, 1.15, clamp((progress - 0.55) / 0.45, 0, 1));
             const glowOpacity = lerp(0, 0.45, clamp((progress - 0.58) / 0.28, 0, 1));
             const taglineOpacity = lerp(0, 1, clamp((progress - 0.78) / 0.18, 0, 1));
+            const captionOpacity = clamp((progress - 0.05) / 0.25, 0, 1);
 
             word.style.transform = `translate3d(-50%, ${wordY}vh, 0) scale(${wordScale})`;
             word.style.filter = `blur(${wordBlur}px)`;
@@ -2517,6 +2522,8 @@
             glow.style.transform = `translate3d(-50%, 0, 0) scale(${glowScale})`;
             glow.style.opacity = glowOpacity;
             tagline.style.opacity = taglineOpacity;
+            captionTop.style.opacity = captionOpacity;
+            captionBottom.style.opacity = captionOpacity;
 
         };
 
