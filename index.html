@@ -1930,6 +1930,7 @@
         filter: blur(28px);
         opacity: 0;
         pointer-events: none;
+        will-change: transform, opacity;
     }
 
     .manifesto-hand {
@@ -2493,7 +2494,7 @@
                 ? lerp(-40, 16, progress)
                 : lerp(-26, 22, progress);
             const wordScale = lerp(1.04, 1, progress);
-            const wordBlur = lerp(6, 0, progress);
+            const wordBlur = isMobile ? 0 : lerp(3, 0, progress);
             const wordOpacity = clamp(progress * 4, 0, 1);
             const handY = lerp(140, 0, Math.min(progress * 1.2, 1));
             const handScale = lerp(0.92, 1, Math.min(progress * 1.15, 1));
@@ -2502,12 +2503,12 @@
             const glowOpacity = lerp(0, 0.45, clamp((progress - 0.58) / 0.28, 0, 1));
             const taglineOpacity = lerp(0, 1, clamp((progress - 0.78) / 0.18, 0, 1));
 
-            word.style.transform = `translateX(-50%) translateY(${wordY}vh) scale(${wordScale})`;
-            word.style.filter = `blur(${wordBlur}px)`;
+            word.style.transform = `translate3d(-50%, ${wordY}vh, 0) scale(${wordScale})`;
+            word.style.filter = wordBlur > 0.1 ? `blur(${wordBlur}px)` : 'none';
             word.style.opacity = wordOpacity;
-            hand.style.transform = `translateX(-50%) translateY(${handY}px) scale(${handScale})`;
+            hand.style.transform = `translate3d(-50%, ${handY}px, 0) scale(${handScale})`;
             hand.style.opacity = handOpacity;
-            glow.style.transform = `translateX(-50%) scale(${glowScale})`;
+            glow.style.transform = `translate3d(-50%, 0, 0) scale(${glowScale})`;
             glow.style.opacity = glowOpacity;
             tagline.style.opacity = taglineOpacity;
 
