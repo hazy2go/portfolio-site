@@ -68,7 +68,7 @@
     html {
         scroll-behavior: smooth;
         font-size: 16px;
-        overflow-x: hidden;
+        overflow-x: clip;
     }
 
     html, body {
@@ -80,7 +80,7 @@
         background: var(--paper);
         color: var(--ink);
         line-height: 1.65;
-        overflow-x: hidden;
+        overflow-x: clip;
         -webkit-font-smoothing: antialiased;
     }
 
@@ -1803,6 +1803,212 @@
             display: none;
         }
     }
+
+    /* ═══════════════════════════════════════
+       MANIFESTO: Community in good hands
+       (scroll-storytelling moment)
+    ═══════════════════════════════════════ */
+    .manifesto {
+        position: relative;
+        height: 170vh;
+        background:
+            radial-gradient(circle at 50% 18%, rgba(196, 92, 62, 0.05), transparent 35%),
+            linear-gradient(180deg, var(--paper) 0%, var(--paper-dark) 55%, var(--paper) 100%);
+    }
+
+    .manifesto-stage {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow: hidden;
+        display: grid;
+        place-items: center;
+        padding: 0 24px;
+    }
+
+    .manifesto-stage::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(circle at 50% 22%, rgba(196, 92, 62, 0.07), transparent 30%),
+            radial-gradient(circle at 50% 78%, rgba(201, 165, 92, 0.10), transparent 38%);
+        pointer-events: none;
+    }
+
+    .manifesto-rule {
+        position: absolute;
+        left: 50%;
+        top: 12%;
+        bottom: 16%;
+        width: 1px;
+        background: linear-gradient(180deg, rgba(26, 23, 20, 0.18), rgba(26, 23, 20, 0.02));
+        transform: translateX(-50%);
+        pointer-events: none;
+    }
+
+    .manifesto-caption {
+        position: absolute;
+        max-width: 260px;
+        color: var(--slate);
+        font-family: 'Nunito Sans', sans-serif;
+        font-size: 0.95rem;
+        line-height: 1.65;
+    }
+
+    .manifesto-caption-top {
+        top: clamp(32px, 7vh, 72px);
+        left: clamp(24px, 6vw, 88px);
+    }
+
+    .manifesto-caption-bottom {
+        right: clamp(24px, 6vw, 88px);
+        bottom: clamp(32px, 7vh, 72px);
+        text-align: right;
+    }
+
+    .manifesto-caption-label {
+        display: block;
+        margin-bottom: 10px;
+        font-family: 'Sora', sans-serif;
+        color: var(--rust);
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+    }
+
+    .manifesto-word {
+        position: absolute;
+        left: 50%;
+        top: 12%;
+        margin: 0;
+        transform: translateX(-50%) translateY(-20vh) scale(1.04);
+        font-family: 'Sora', sans-serif;
+        font-weight: 700;
+        font-style: normal;
+        font-size: clamp(2.4rem, 7vw, 5.4rem);
+        line-height: 1.2;
+        letter-spacing: -0.04em;
+        white-space: nowrap;
+        padding: 0.05em 0.12em 0.22em;
+        will-change: transform, filter, opacity;
+    }
+
+    .manifesto-word .word-state {
+        display: inline-block;
+        padding: 0 0.06em 0.15em;
+        background: linear-gradient(135deg, var(--ink) 0%, var(--ink-soft) 45%, var(--rust) 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    .manifesto-glow {
+        position: absolute;
+        left: 50%;
+        bottom: 50%;
+        width: min(720px, 78vw);
+        height: 200px;
+        transform: translateX(-50%) scale(0.7);
+        border-radius: 999px;
+        background: radial-gradient(ellipse, rgba(201, 165, 92, 0.18), rgba(196, 92, 62, 0.08) 50%, transparent 80%);
+        filter: blur(28px);
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .manifesto-hand {
+        position: absolute;
+        left: 50%;
+        bottom: 26%;
+        width: min(720px, 80vw);
+        transform: translateX(-50%) translateY(140px) scale(0.92);
+        transform-origin: center bottom;
+        opacity: 0.25;
+        filter:
+            drop-shadow(0 0 0.6px rgba(45, 42, 38, 0.35))
+            drop-shadow(0 0 10px rgba(201, 165, 92, 0.10))
+            drop-shadow(0 24px 44px rgba(26, 23, 20, 0.14));
+        will-change: transform, opacity;
+        pointer-events: none;
+    }
+
+    .manifesto-hand img {
+        display: block;
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        mix-blend-mode: multiply;
+        opacity: 0.95;
+        filter: sepia(0.5) saturate(0.85) hue-rotate(-10deg) contrast(1.02) brightness(0.98);
+        mask-image: linear-gradient(180deg, black 0%, black 72%, rgba(0,0,0,0.55) 84%, rgba(0,0,0,0.15) 94%, transparent 100%);
+        -webkit-mask-image: linear-gradient(180deg, black 0%, black 72%, rgba(0,0,0,0.55) 84%, rgba(0,0,0,0.15) 94%, transparent 100%);
+    }
+
+    .manifesto-tagline {
+        position: absolute;
+        left: 50%;
+        bottom: 18%;
+        transform: translateX(-50%);
+        font-family: 'Sora', sans-serif;
+        font-weight: 500;
+        font-size: clamp(1.05rem, 2vw, 1.45rem);
+        letter-spacing: 0.01em;
+        text-align: center;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .manifesto-tagline span {
+        background: linear-gradient(135deg, var(--rust) 0%, var(--ink-soft) 75%, var(--ink) 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    .manifesto-tagline::before {
+        content: "—";
+        display: inline-block;
+        margin-right: 10px;
+        color: var(--rust);
+        opacity: 0.7;
+    }
+
+    @media (max-width: 720px) {
+        .manifesto { height: 165vh; }
+        .manifesto-caption {
+            max-width: 150px;
+            font-size: 0.74rem;
+            line-height: 1.45;
+        }
+        .manifesto-caption-top { left: 16px; top: 22px; }
+        .manifesto-caption-bottom { right: 16px; top: 22px; bottom: auto; }
+        .manifesto-caption-label { font-size: 0.62rem; margin-bottom: 6px; }
+        .manifesto-hand { width: 124vw; bottom: 12%; }
+        .manifesto-rule { display: none; }
+        .manifesto-tagline {
+            bottom: 4%;
+            font-size: 0.95rem;
+            white-space: nowrap;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .manifesto { height: auto; min-height: 100vh; }
+        .manifesto-stage { position: relative; height: auto; min-height: 100vh; padding: 80px 24px; }
+        .manifesto-word {
+            position: relative; left: auto; top: auto;
+            transform: translateY(0) scale(1);
+            filter: none;
+        }
+        .manifesto-hand {
+            transform: translateX(-50%) translateY(0) scale(1);
+            opacity: 1;
+        }
+        .manifesto-tagline { opacity: 1; }
+        .manifesto-glow { opacity: 0.45; transform: translateX(-50%) scale(1); }
+    }
 </style>
 
 
@@ -1844,6 +2050,35 @@
                 </svg>
             </a>
         </div>
+    </div>
+</section>
+
+<!-- Manifesto: Community in good hands (scroll-storytelling) -->
+<section class="manifesto" id="manifesto" aria-label="Community in good hands">
+    <div class="manifesto-stage">
+        <div class="manifesto-rule"></div>
+
+        <div class="manifesto-caption manifesto-caption-top">
+            <span class="manifesto-caption-label">Belief</span>
+            A community isn't built by accident. It needs direction, care, and a place to land.
+        </div>
+
+        <h2 class="manifesto-word" aria-label="Your community, in good hands.">
+            <span class="word-state">Your Community</span>
+        </h2>
+
+        <div class="manifesto-glow"></div>
+
+        <div class="manifesto-hand" aria-hidden="true">
+            <img src="assets/hand.png" alt="" loading="lazy" width="820" height="820">
+        </div>
+
+        <div class="manifesto-caption manifesto-caption-bottom">
+            <span class="manifesto-caption-label">Promise</span>
+            Held with intention. Carried with patience. Grown on purpose.
+        </div>
+
+        <div class="manifesto-tagline"><span>in good hands</span></div>
     </div>
 </section>
 
@@ -2195,6 +2430,56 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="flow-gradient.js?v=6"></script>
 <script src="glare-cards.js"></script>
+<script type="module">
+    // Manifesto scroll-storytelling: word "community" lands in the open hand.
+    const manifesto = document.querySelector('#manifesto');
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (manifesto && !reduced) {
+        const word = manifesto.querySelector('.manifesto-word');
+        const hand = manifesto.querySelector('.manifesto-hand');
+        const glow = manifesto.querySelector('.manifesto-glow');
+        const tagline = manifesto.querySelector('.manifesto-tagline');
+
+        const clamp = (v, a, b) => Math.min(Math.max(v, a), b);
+        const lerp = (a, b, t) => a + (b - a) * t;
+
+        let raf = null;
+
+        const update = () => {
+            raf = null;
+            const rect = manifesto.getBoundingClientRect();
+            const travel = rect.height - window.innerHeight;
+            const progress = clamp((-rect.top) / travel, 0, 1);
+
+            const wordY = lerp(-26, 22, progress);
+            const wordScale = lerp(1.04, 1, progress);
+            const wordBlur = lerp(6, 0, progress);
+            const handY = lerp(140, 0, Math.min(progress * 1.2, 1));
+            const handScale = lerp(0.92, 1, Math.min(progress * 1.15, 1));
+            const handOpacity = lerp(0.25, 1, Math.min(progress * 1.18, 1));
+            const glowScale = lerp(0.7, 1.15, clamp((progress - 0.55) / 0.45, 0, 1));
+            const glowOpacity = lerp(0, 0.45, clamp((progress - 0.58) / 0.28, 0, 1));
+            const taglineOpacity = lerp(0, 1, clamp((progress - 0.78) / 0.18, 0, 1));
+
+            word.style.transform = `translateX(-50%) translateY(${wordY}vh) scale(${wordScale})`;
+            word.style.filter = `blur(${wordBlur}px)`;
+            hand.style.transform = `translateX(-50%) translateY(${handY}px) scale(${handScale})`;
+            hand.style.opacity = handOpacity;
+            glow.style.transform = `translateX(-50%) scale(${glowScale})`;
+            glow.style.opacity = glowOpacity;
+            tagline.style.opacity = taglineOpacity;
+
+        };
+
+        const onScroll = () => {
+            if (raf == null) raf = requestAnimationFrame(update);
+        };
+
+        update();
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll);
+    }
+</script>
 <script>
     // ═══════════════════════════════════════
     // Scroll reveal observer
