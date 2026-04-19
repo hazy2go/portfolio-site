@@ -1990,19 +1990,22 @@
     }
 
     @media (max-width: 720px) {
-        .manifesto { height: 165vh; }
+        .manifesto { height: 130vh; }
+        .manifesto-stage { height: 78vh; }
         .manifesto-caption {
             max-width: 150px;
             font-size: 0.74rem;
             line-height: 1.45;
         }
-        .manifesto-caption-top { left: 16px; top: 22px; }
-        .manifesto-caption-bottom { right: 16px; top: 22px; bottom: auto; }
+        .manifesto-caption-top { left: 16px; top: 76px; }
+        .manifesto-caption-bottom { right: 16px; top: 76px; bottom: auto; }
         .manifesto-caption-label { font-size: 0.62rem; margin-bottom: 6px; }
-        .manifesto-hand { width: 100vw; bottom: 32%; }
+        .manifesto-word { top: 18%; }
+        .manifesto-hand { width: 100vw; bottom: 24%; }
+        .manifesto-glow { bottom: 38%; }
         .manifesto-rule { display: none; }
         .manifesto-tagline {
-            bottom: 24%;
+            bottom: 8%;
             font-size: 0.95rem;
             white-space: nowrap;
         }
@@ -2485,7 +2488,10 @@
             const travel = rect.height - window.innerHeight;
             const progress = clamp((-rect.top) / travel, 0, 1);
 
-            const wordY = lerp(-26, 22, progress);
+            const isMobile = window.innerWidth <= 720;
+            const wordY = isMobile
+                ? lerp(-20, 16, progress)
+                : lerp(-26, 22, progress);
             const wordScale = lerp(1.04, 1, progress);
             const wordBlur = lerp(6, 0, progress);
             const handY = lerp(140, 0, Math.min(progress * 1.2, 1));
