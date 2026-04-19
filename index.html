@@ -1990,9 +1990,8 @@
     }
 
     @media (max-width: 720px) {
-        .manifesto { height: 130vh; background: var(--paper); }
+        .manifesto { height: 130vh; }
         .manifesto-stage { height: 78vh; }
-        .manifesto-stage::before { display: none; }
         .manifesto-caption {
             max-width: 150px;
             font-size: 0.74rem;
@@ -2491,10 +2490,11 @@
 
             const isMobile = window.innerWidth <= 720;
             const wordY = isMobile
-                ? lerp(-20, 16, progress)
+                ? lerp(-40, 16, progress)
                 : lerp(-26, 22, progress);
             const wordScale = lerp(1.04, 1, progress);
             const wordBlur = lerp(6, 0, progress);
+            const wordOpacity = clamp(progress * 4, 0, 1);
             const handY = lerp(140, 0, Math.min(progress * 1.2, 1));
             const handScale = lerp(0.92, 1, Math.min(progress * 1.15, 1));
             const handOpacity = lerp(0.25, 1, Math.min(progress * 1.18, 1));
@@ -2504,6 +2504,7 @@
 
             word.style.transform = `translateX(-50%) translateY(${wordY}vh) scale(${wordScale})`;
             word.style.filter = `blur(${wordBlur}px)`;
+            word.style.opacity = wordOpacity;
             hand.style.transform = `translateX(-50%) translateY(${handY}px) scale(${handScale})`;
             hand.style.opacity = handOpacity;
             glow.style.transform = `translateX(-50%) scale(${glowScale})`;
