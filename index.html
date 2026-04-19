@@ -2001,12 +2001,12 @@
         .manifesto-caption-top { left: 16px; top: 76px; }
         .manifesto-caption-bottom { right: 16px; top: 76px; bottom: auto; }
         .manifesto-caption-label { font-size: 0.62rem; margin-bottom: 6px; }
-        .manifesto-word { top: 18%; }
-        .manifesto-hand { width: 100vw; bottom: 24%; }
-        .manifesto-glow { bottom: 38%; }
+        .manifesto-word { top: 24%; }
+        .manifesto-hand { width: 100vw; bottom: 26%; }
+        .manifesto-glow { bottom: 40%; }
         .manifesto-rule { display: none; }
         .manifesto-tagline {
-            bottom: 8%;
+            bottom: 14%;
             font-size: 0.95rem;
             white-space: nowrap;
         }
@@ -2497,7 +2497,7 @@
 
 
             const wordY = isMobile
-                ? lerp(-40, 16, progress)
+                ? lerp(-40, 8, progress)
                 : lerp(-26, 22, progress);
             const wordScale = lerp(1.04, 1, progress);
             const wordBlur = lerp(6, 0, progress);
