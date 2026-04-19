@@ -2482,19 +2482,25 @@
         const lerp = (a, b, t) => a + (b - a) * t;
 
         let raf = null;
+        let inView = false;
+        let viewportH = window.innerHeight;
+        let isMobile = window.innerWidth <= 720;
+        let lastProgress = -1;
 
         const update = () => {
             raf = null;
             const rect = manifesto.getBoundingClientRect();
-            const travel = rect.height - window.innerHeight;
+            const travel = rect.height - viewportH;
             const progress = clamp((-rect.top) / travel, 0, 1);
+            if (progress === lastProgress) return;
+            lastProgress = progress;
 
-            const isMobile = window.innerWidth <= 720;
+
             const wordY = isMobile
                 ? lerp(-40, 16, progress)
                 : lerp(-26, 22, progress);
             const wordScale = lerp(1.04, 1, progress);
-            const wordBlur = isMobile ? 0 : lerp(3, 0, progress);
+            const wordBlur = lerp(6, 0, progress);
             const wordOpacity = clamp(progress * 4, 0, 1);
             const handY = lerp(140, 0, Math.min(progress * 1.2, 1));
             const handScale = lerp(0.92, 1, Math.min(progress * 1.15, 1));
@@ -2504,7 +2510,7 @@
             const taglineOpacity = lerp(0, 1, clamp((progress - 0.78) / 0.18, 0, 1));
 
             word.style.transform = `translate3d(-50%, ${wordY}vh, 0) scale(${wordScale})`;
-            word.style.filter = wordBlur > 0.1 ? `blur(${wordBlur}px)` : 'none';
+            word.style.filter = `blur(${wordBlur}px)`;
             word.style.opacity = wordOpacity;
             hand.style.transform = `translate3d(-50%, ${handY}px, 0) scale(${handScale})`;
             hand.style.opacity = handOpacity;
@@ -2515,12 +2521,25 @@
         };
 
         const onScroll = () => {
+            if (inView && raf == null) raf = requestAnimationFrame(update);
+        };
+
+        const io = new IntersectionObserver((entries) => {
+            inView = entries[0].isIntersecting;
+            if (inView && raf == null) raf = requestAnimationFrame(update);
+        }, { rootMargin: '100px 0px' });
+        io.observe(manifesto);
+
+        const onResize = () => {
+            viewportH = window.innerHeight;
+            isMobile = window.innerWidth <= 720;
+            lastProgress = -1;
             if (raf == null) raf = requestAnimationFrame(update);
         };
 
         update();
         window.addEventListener('scroll', onScroll, { passive: true });
-        window.addEventListener('resize', onScroll);
+        window.addEventListener('resize', onResize, { passive: true });
     }
 </script>
 <script>
