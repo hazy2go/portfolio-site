@@ -835,11 +835,13 @@
         
         /* Spacing */
         margin-bottom: 0.75rem;
-        
+        box-sizing: border-box;
+        padding: 14%; /* inset so every logo floats on the light tile */
+
         /* Visual styling */
-        border-radius: 10px;
+        border-radius: 12px;
         background: var(--paper-dark);
-        
+
         /* Critical: clip overflow and center content */
         overflow: hidden;
         position: relative;
@@ -853,15 +855,15 @@
         flex-shrink: 0;
     }
 
-    /* Default image styling - for square/rectangular logos */
+    /* Default image styling - every logo contained & centered on its tile */
     .logo-container img {
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: contain;
         object-position: center;
         filter: grayscale(100%);
         transition: filter 0.3s ease;
-        
+
         /* Reset any inherited sizing */
         max-width: none;
         max-height: none;
@@ -871,58 +873,9 @@
         filter: grayscale(0%);
     }
 
-    /* ========================================
-       FIXED: Pathfinders - Circular logo handling
-       The logo is a circle with transparent corners.
-       We scale it up so the circle inscribes the square container.
-       Scale factor: √2 ≈ 1.414 (circle touching all 4 sides)
-       ======================================== */
-    .logo-pathfinders {
-        /* Keep the same container size */
-        background: var(--paper-dark);
-    }
-
-    .logo-pathfinders img {
-        /* Scale up the circular image so circle fills the square */
-        width: 141.4%;
-        height: 141.4%;
-        
-        /* Use contain to preserve the circle shape */
-        object-fit: contain;
-        
-        /* Absolute positioning to center the scaled image */
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        
-        /* Override the max constraints */
-        max-width: none;
-        max-height: none;
-    }
-
-    /* ========================================
-       Upshot - wide wordmark SVG
-       ======================================== */
-    .logo-upshot {
-        background: var(--paper-dark);
-    }
-
-    .logo-upshot img {
-        width: 86%;
-        height: auto;
-        max-height: 70%;
-        object-fit: contain;
-    }
-
-    /* ========================================
-       FIXED: SOLDecoder - Character illustration
-       This logo may have different aspect ratio
-       ======================================== */
-    .logo-soldecoder img {
-        object-fit: cover;
-        object-position: center top; /* Focus on the character's face/upper area */
-    }
+    /* All logos now share the uniform contained treatment above.
+       Per-brand overrides are no longer needed — each mark sits
+       centered on the same light tile via .logo-container padding. */
 
     .glare-card-content .client-name {
         white-space: nowrap;
