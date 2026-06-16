@@ -3,5 +3,8 @@
     "deploymentEnabled": {
       "main": true
     }
-  }
+  },
+  "redirects": [
+    { "source": "/nerv", "destination": "/nerv/", "permanent": false }
+  ]
 }
