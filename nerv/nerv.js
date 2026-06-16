@@ -380,7 +380,6 @@
   /* ───────────────────────── GLITCH CCTV FEED ───────────────────────── */
   function feedMonitor() {
     if (document.querySelector('.feed-monitor')) return;
-    if (matchMedia('(max-width:760px)').matches) return; // skip on small screens
     const VID = '0Uhh62MUEic';
     const wrap = document.createElement('div');
     wrap.className = 'feed-monitor';
@@ -390,16 +389,22 @@
       '<div id="ytfeed"></div>' +
       '<div class="feed-monitor__rgb"></div>' +
       '<div class="feed-monitor__scan"></div>' +
-      '<div class="feed-monitor__bar"><button class="feed-monitor__btn" aria-label="Toggle feed audio">VOL 00</button><button class="feed-monitor__x" aria-label="Close feed">CLOSE ✕</button></div>';
+      '<div class="feed-monitor__bar">' +
+        '<button class="feed-monitor__pp" aria-label="Play or pause feed" title="Play / pause">❚❚</button>' +
+        '<button class="feed-monitor__btn" aria-label="Toggle feed audio" title="Audio volume">♪ VOL 10</button>' +
+        '<button class="feed-monitor__x" aria-label="Close feed" title="Close">✕</button>' +
+      '</div>';
     document.body.appendChild(wrap);
 
     const btn = wrap.querySelector('.feed-monitor__btn');
+    const pp = wrap.querySelector('.feed-monitor__pp');
     const VOL = 10;
-    let player = null, ready = false, gestured = false;
+    let player = null, ready = false, gestured = false, playing = true;
     // persist audio + playback position across page navigations
     const LS = window.localStorage;
     let audioOn = !LS || LS.getItem('feedAudio') !== '0'; // default on unless muted before
     const paint = () => { btn.textContent = audioOn ? ('♪ VOL ' + VOL) : '🔇 MUTED'; btn.classList.toggle('on', audioOn); };
+    const paintPP = () => { pp.textContent = playing ? '❚❚' : '▶'; pp.classList.toggle('on', playing); };
     const apply = () => {
       if (!player || !player.setVolume) return;
       // autoplay-with-sound is blocked until the user interacts (gestured)
@@ -419,6 +424,7 @@
           const dur = e.target.getDuration && e.target.getDuration();
           if (t > 0.5 && (!dur || t < dur - 0.5)) e.target.seekTo(t, true);
           apply(); // if the user already interacted, bring audio up now
+          playing = true; paintPP();
           setInterval(() => { try { LS.setItem('feedT', e.target.getCurrentTime()); } catch (er) {} }, 800);
         } },
       });
@@ -435,17 +441,29 @@
     const detach = () => EVTS.forEach(ev => window.removeEventListener(ev, onGesture));
     EVTS.forEach(ev => window.addEventListener(ev, onGesture, { passive: true }));
 
-    paint();
+    paint(); paintPP();
     btn.addEventListener('click', (e) => { e.stopPropagation(); gestured = true; audioOn = !audioOn; persist(); apply(); });
+    pp.addEventListener('click', (e) => {
+      e.stopPropagation(); if (!player || !player.playVideo) return;
+      if (playing) { player.pauseVideo(); playing = false; } else { player.playVideo(); playing = true; }
+      paintPP();
+    });
     wrap.querySelector('.feed-monitor__x').addEventListener('click', (e) => {
       e.stopPropagation(); if (player && player.stopVideo) player.stopVideo(); wrap.remove(); detach();
     });
   }
 
   // re-start background videos after a client-side page swap (autoplay attr is not
-  // honoured on script-inserted elements, so navigated pages would show no video)
+  // honoured on script-inserted elements). Also retry on first touch for mobile,
+  // where muted autoplay is sometimes deferred until interaction.
   function playBgVideos() {
-    $$('.bg-video').forEach(v => { v.muted = true; const p = v.play(); if (p) p.catch(() => {}); });
+    const go = () => $$('.bg-video').forEach(v => {
+      v.muted = true; v.setAttribute('playsinline', ''); const p = v.play(); if (p && p.catch) p.catch(() => {});
+    });
+    go();
+    const retry = () => { go(); window.removeEventListener('touchstart', retry); window.removeEventListener('pointerdown', retry); };
+    window.addEventListener('touchstart', retry, { once: true, passive: true });
+    window.addEventListener('pointerdown', retry, { once: true });
   }
 
   /* ───────────────────────── INIT / REMOUNT ───────────────────────── */

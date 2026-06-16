@@ -9,6 +9,7 @@
   'use strict';
   if (!window.fetch || !window.history.pushState) return; // very old browser: native nav
   const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; // we control scroll on swap
   const cache = new Map();
 
   const seg = (u) => u.split('?')[0].split('#')[0].split('/').pop() || 'index.html';
@@ -51,6 +52,7 @@
     });
 
     window.scrollTo(0, 0);
+    requestAnimationFrame(() => window.scrollTo(0, 0)); // beat View Transition scroll restore
     if (window.NERV) window.NERV.mountPage();
     if (window.NERV_MOTION) window.NERV_MOTION.mountMotion();
   }
