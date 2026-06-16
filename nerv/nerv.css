@@ -497,7 +497,8 @@ p { max-width: 68ch; text-wrap: pretty; }
 .ticker__track b { color: var(--green); font-weight: 400; }
 @keyframes ticker { to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce){ .ticker__track{ animation:none; padding-left:1rem } }
-.page--ticker { padding-top: 68px; }
+.page--ticker { padding-top: 46px; }
+.ticker { display: none; } /* running marquee removed per request */
 
 /* ═══ DENSE TERMINAL PANEL — header + footer chrome, inner grid ═══ */
 .panel--term { padding: 0; overflow: hidden; }
