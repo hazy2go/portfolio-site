@@ -27,11 +27,12 @@
     background: none;
     border: none;
     font-family: var(--font-mono, 'JetBrains Mono', monospace);
-    font-size: 0.8rem;
+    font-size: 0.95rem;
+    font-weight: 500;
     letter-spacing: 0.08em;
-    color: var(--slate, #5c5a56);
+    color: var(--rust, #c45c3e);
     cursor: pointer;
-    opacity: 0.75;
+    opacity: 0.95;
     transition: color 0.2s ease, opacity 0.2s ease;
     -webkit-tap-highlight-color: transparent;
 }
