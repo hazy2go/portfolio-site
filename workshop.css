@@ -1,0 +1,508 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   WORKSHOP — easter-egg build showcase
+   A warm-dark "secret mode" that folds in over the cream marketing page.
+   Modern + technical: espresso surfaces, rust/gold/amber accents, mono labels.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+    --ws-void:   #16110d;   /* deep espresso canvas */
+    --ws-panel:  #1f1813;
+    --ws-panel2: #271d16;
+    --ws-line:   rgba(216,181,106,.16);
+    --ws-line-2: rgba(216,181,106,.30);
+    --ws-cream:  #f3eee3;   /* primary text  ~14:1 on void */
+    --ws-mute:   #bba994;   /* secondary text ~6.5:1 on void */
+    --ws-rust:   #e07a55;   /* lifted rust for dark bg legibility */
+    --ws-gold:   #d8b56a;
+    --ws-amber:  #eaa05a;
+    --ws-mono:   'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* ── trigger under Skills → Technical ──────────────────────────────────── */
+.skill-more {
+    position: relative;
+    display: inline-block;
+    margin-top: 1.1rem;
+    padding: 0;
+    background: none;
+    border: none;
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    color: var(--slate, #5c5a56);
+    cursor: pointer;
+    opacity: 0.75;
+    transition: color 0.2s ease, opacity 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+.skill-more__txt { position: relative; z-index: 1; }
+.skill-more__txt::before { content: '↳ '; color: var(--rust, #c45c3e); }
+/* RGB-split glitch ghosts — mostly idle, brief burst each cycle, faster on hover */
+.skill-more::before,
+.skill-more::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 1.05em; top: 0;             /* sit past the ↳ glyph */
+    pointer-events: none;
+    opacity: 0;
+}
+.skill-more::before { color: #62e6ea; animation: ws-trig-a 3.6s steps(1) infinite; }
+.skill-more::after  { color: #e07a55; animation: ws-trig-b 3.6s steps(1) infinite 0.08s; }
+.skill-more:hover, .skill-more:focus-visible { color: var(--rust, #c45c3e); opacity: 1; outline: none; }
+.skill-more:hover::before, .skill-more:focus-visible::before,
+.skill-more:hover::after,  .skill-more:focus-visible::after { animation-duration: 0.9s; }
+@keyframes ws-trig-a {
+    0%, 6%, 100% { opacity: 0; transform: translate(0, 0); clip-path: inset(0 0 100% 0); }
+    1.5% { opacity: .6; transform: translate(-1.5px, -1px); clip-path: inset(0 0 62% 0); }
+    3%   { opacity: .6; transform: translate(1.5px, 1px);   clip-path: inset(58% 0 0 0); }
+    4.5% { opacity: 0; }
+}
+@keyframes ws-trig-b {
+    0%, 7%, 100% { opacity: 0; transform: translate(0, 0); clip-path: inset(0 0 100% 0); }
+    2%   { opacity: .55; transform: translate(1.5px, 1px);   clip-path: inset(0 0 60% 0); }
+    3.8% { opacity: .55; transform: translate(-1.5px, -1px); clip-path: inset(60% 0 0 0); }
+    5%   { opacity: 0; }
+}
+
+/* ── overlay shell ─────────────────────────────────────────────────────── */
+.workshop {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: var(--ws-void);
+    color: var(--ws-cream);
+    overflow: hidden;                 /* shell scrolls, not this */
+    perspective: 1400px;
+    font-family: 'Nunito Sans', system-ui, sans-serif;
+    opacity: 0;
+}
+.workshop[hidden] { display: none; }
+.workshop.is-open { opacity: 1; }
+
+/* faint technical grid + warm vignette behind everything */
+.workshop::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(120% 90% at 50% -10%, rgba(224,122,85,.10), transparent 55%),
+        radial-gradient(90% 70% at 80% 110%, rgba(216,181,106,.07), transparent 60%),
+        linear-gradient(var(--ws-line) 1px, transparent 1px) 0 0 / 100% 46px,
+        linear-gradient(90deg, var(--ws-line) 1px, transparent 1px) 0 0 / 46px 100%;
+    opacity: .5;
+    pointer-events: none;
+}
+
+/* ── glitch / dither transition (canvas) + boot readout ────────────────── */
+.ws-fx {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    pointer-events: none;
+    opacity: 0;                       /* JS toggles only while transitioning */
+}
+.ws-fx.is-active { opacity: 1; }
+
+.ws-boot {
+    position: absolute;
+    inset: 0;
+    z-index: 6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.9rem;
+    pointer-events: none;
+    opacity: 0;
+    font-family: var(--ws-mono);
+    color: var(--ws-cream);
+    text-shadow: 0 0 12px rgba(224,122,85,.35);
+}
+.ws-boot.is-active { opacity: 1; }
+.ws-boot__line {
+    margin: 0;
+    font-size: clamp(0.95rem, 2.4vw, 1.35rem);
+    font-weight: 700;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    padding-left: 0.42em;             /* offset the tracking so it reads centred */
+}
+.ws-boot__mark { color: var(--ws-amber); margin-right: 0.5em; }
+.ws-boot__bar {
+    width: min(340px, 62vw);
+    height: 2px;
+    background: rgba(216,181,106,.18);
+    overflow: hidden;
+}
+.ws-boot__bar i {
+    display: block;
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--ws-amber), var(--ws-gold));
+    box-shadow: 0 0 10px rgba(234,160,90,.7);
+}
+.ws-boot__meta {
+    margin: 0;
+    font-size: 0.66rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ws-mute);
+}
+.ws-boot__pct { color: var(--ws-gold); }
+
+/* persistent NieR-ish mood on the showcase itself (subtle, keeps contrast) */
+.workshop::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+        0deg, rgba(0,0,0,.16) 0 1px, transparent 1px 3px);
+    mix-blend-mode: multiply;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+.workshop.is-revealed::after { opacity: .5; }
+
+/* ── scrollable content shell ──────────────────────────────────────────── */
+.ws-shell {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 clamp(1.25rem, 5vw, 5rem) clamp(3rem, 7vw, 6rem);
+    opacity: 0;                       /* JS reveals after the fold */
+}
+.workshop.is-revealed .ws-shell { opacity: 1; }
+
+/* top bar */
+.ws-bar {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.1rem 0;
+    margin-bottom: clamp(1.5rem, 4vw, 3rem);
+    background: linear-gradient(var(--ws-void) 70%, transparent);
+    backdrop-filter: blur(2px);
+}
+.ws-tag {
+    font-family: var(--ws-mono);
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: var(--ws-gold);
+}
+.ws-tag i { color: var(--ws-mute); font-weight: 400; font-style: italic; letter-spacing: 0.04em; }
+.ws-close {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.8rem;
+    background: var(--ws-panel);
+    border: 1px solid var(--ws-line-2);
+    border-radius: 3px;
+    color: var(--ws-cream);
+    font-family: var(--ws-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+.ws-close:hover, .ws-close:focus-visible {
+    border-color: var(--ws-rust);
+    color: var(--ws-rust);
+    outline: none;
+}
+
+/* intro band */
+.ws-intro { max-width: 60ch; margin: 0 0 clamp(2.5rem, 6vw, 4.5rem); }
+.ws-intro h2 {
+    font-family: 'Sora', sans-serif;
+    font-weight: 600;
+    font-size: clamp(1.8rem, 4.5vw, 3.1rem);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+    margin: 0 0 1.1rem;
+    color: var(--ws-cream);
+}
+.ws-intro p {
+    font-size: clamp(1rem, 1.6vw, 1.18rem);
+    line-height: 1.65;
+    color: var(--ws-mute);
+    text-wrap: pretty;
+}
+
+/* ── tool blocks ───────────────────────────────────────────────────────── */
+.ws-tools { display: flex; flex-direction: column; gap: clamp(3rem, 7vw, 6rem); }
+
+.ws-tool {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    align-items: center;
+    padding-top: clamp(1.5rem, 4vw, 2.5rem);
+    border-top: 1px solid var(--ws-line-2);
+    position: relative;
+}
+.ws-tool::before {                   /* big ghosted index in the corner */
+    content: attr(data-i);
+    position: absolute;
+    top: -0.35em;
+    right: 0;
+    font-family: var(--ws-mono);
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    font-weight: 700;
+    color: var(--ws-line-2);
+    line-height: 1;
+    pointer-events: none;
+}
+.ws-tool--flip .ws-media { order: 2; }
+
+/* media stage — the AI video glows as edge-masked ambient light around a
+   framed product shot. The stage sizes to the frame, so the ambient ring is
+   even and the frame always hugs the screenshot (no letterbox bars). */
+.ws-media {
+    position: relative;
+    margin: 0;
+    overflow: hidden;
+    border-radius: 12px;
+    background:
+        radial-gradient(78% 72% at 50% 40%, rgba(224,122,85,.14), transparent 72%),
+        var(--ws-void);
+    display: grid;
+    place-items: center;
+    padding: clamp(1.3rem, 3.6vw, 2.5rem);
+    isolation: isolate;
+}
+/* ambient AI video: edges masked away (no hard rectangle), gentle fade-in */
+.ws-vid {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    z-index: 0;
+    opacity: 0;
+    transform: scale(1.12);
+    filter: saturate(1.2) contrast(1.04) blur(1.5px);
+    -webkit-mask-image: radial-gradient(115% 100% at 50% 42%, #000 30%, transparent 76%);
+            mask-image: radial-gradient(115% 100% at 50% 42%, #000 30%, transparent 76%);
+    transition: opacity 1.4s ease 0.2s;
+}
+.workshop.is-revealed .ws-vid { opacity: 0.5; }
+.ws-vid--missing { display: none; }
+/* slow ~5% drift-zoom on the two more static loops */
+.ws-tool[data-i="02"] .ws-vid,
+.ws-tool[data-i="03"] .ws-vid { animation: ws-vid-zoom 22s ease-in-out infinite alternate; }
+@keyframes ws-vid-zoom {
+    from { transform: scale(1.1); }
+    to   { transform: scale(1.16); }
+}
+
+/* floating window: hugs the screenshot with an even matte bezel + glow */
+.ws-frame {
+    --tilt: -5deg;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 560px;
+    box-sizing: border-box;
+    padding: clamp(5px, 0.9vw, 9px);
+    border-radius: 12px;
+    border: 1px solid rgba(216,181,106,.22);
+    background: linear-gradient(160deg, var(--ws-panel2), var(--ws-panel));
+    box-shadow:
+        0 30px 64px -22px rgba(0,0,0,.85),
+        0 0 0 1px rgba(0,0,0,.45),
+        0 12px 52px -10px rgba(224,122,85,.18);
+    transform: perspective(1100px) rotateY(var(--tilt));
+    opacity: 0;
+    transition: opacity 0.9s ease 0.3s;
+    animation: ws-float 8s ease-in-out infinite;
+}
+.ws-frame--light { border-color: rgba(216,181,106,.32); }
+.ws-tool--flip .ws-frame { --tilt: 5deg; }
+.ws-tool[data-i="03"] .ws-frame { animation-delay: -3.6s; }
+.workshop.is-revealed .ws-frame { opacity: 1; }
+.ws-frame::after {                    /* faint top-lit sheen on the glass */
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(125deg, rgba(255,255,255,.07), transparent 40%);
+    pointer-events: none;
+    z-index: 1;
+}
+.ws-shot {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+}
+@keyframes ws-float {
+    0%, 100% { transform: perspective(1100px) rotateY(var(--tilt)) translateY(-6px) rotate(0.25deg); }
+    50%      { transform: perspective(1100px) rotateY(var(--tilt)) translateY(7px)  rotate(-0.25deg); }
+}
+
+/* body */
+.ws-idx {
+    font-family: var(--ws-mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ws-gold);
+    margin: 0 0 0.6rem;
+}
+.ws-body h3 {
+    font-family: 'Sora', sans-serif;
+    font-weight: 600;
+    font-size: clamp(1.5rem, 3vw, 2.1rem);
+    letter-spacing: -0.02em;
+    margin: 0 0 0.5rem;
+    color: var(--ws-cream);
+}
+.ws-lede {
+    font-size: clamp(1.02rem, 1.7vw, 1.2rem);
+    line-height: 1.5;
+    color: var(--ws-rust);
+    margin: 0 0 1.5rem;
+    max-width: 46ch;
+}
+
+.ws-breakdown { margin: 0 0 1.5rem; display: flex; flex-direction: column; gap: 0.9rem; }
+.ws-breakdown > div { display: grid; grid-template-columns: 5.5rem 1fr; gap: 0.9rem; align-items: start; }
+.ws-breakdown dt {
+    font-family: var(--ws-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ws-gold);
+    padding-top: 0.18rem;
+}
+.ws-breakdown dd {
+    margin: 0;
+    font-size: 0.97rem;
+    line-height: 1.6;
+    color: var(--ws-mute);
+    max-width: 56ch;
+}
+.ws-result {
+    background: linear-gradient(90deg, rgba(224,122,85,.10), transparent);
+    border-radius: 4px;
+    padding: 0.7rem 0.9rem;
+    margin-left: -0.9rem;
+}
+.ws-result dd { color: var(--ws-cream); font-weight: 600; }
+
+.ws-stack { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0 0 1.4rem; padding: 0; }
+.ws-stack li {
+    font-family: var(--ws-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.03em;
+    color: var(--ws-mute);
+    padding: 0.3rem 0.6rem;
+    border: 1px solid var(--ws-line-2);
+    border-radius: 3px;
+}
+
+.ws-link {
+    display: inline-block;
+    font-family: var(--ws-mono);
+    font-size: 0.84rem;
+    letter-spacing: 0.03em;
+    color: var(--ws-rust);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s ease, color 0.2s ease;
+    margin-right: 1.3rem;
+}
+.ws-link:hover, .ws-link:focus-visible { border-color: var(--ws-rust); outline: none; }
+.ws-link--ghost { color: var(--ws-mute); }
+.ws-link--ghost:hover { color: var(--ws-cream); border-color: var(--ws-mute); }
+
+/* outro */
+.ws-outro {
+    margin-top: clamp(3rem, 7vw, 6rem);
+    padding-top: clamp(2rem, 5vw, 3rem);
+    border-top: 1px solid var(--ws-line-2);
+    text-align: center;
+}
+.ws-outro p {
+    font-family: 'Sora', sans-serif;
+    font-weight: 500;
+    font-size: clamp(1.25rem, 2.6vw, 1.9rem);
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    max-width: 30ch;
+    margin: 0 auto 1.6rem;
+    color: var(--ws-cream);
+}
+.ws-cta {
+    display: inline-block;
+    padding: 0.85rem 1.6rem;
+    background: var(--ws-rust);
+    color: #1a0f0a;
+    font-family: var(--ws-mono);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.ws-cta:hover, .ws-cta:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(224,122,85,.3);
+    outline: none;
+}
+.ws-gh {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.3rem;
+    font-family: var(--ws-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    color: var(--ws-mute);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+.ws-gh svg { opacity: 0.85; transition: opacity 0.2s ease; }
+.ws-gh:hover, .ws-gh:focus-visible { color: var(--ws-cream); outline: none; }
+.ws-gh:hover svg { opacity: 1; }
+.ws-outro .ws-gh { display: flex; justify-content: center; }   /* its own centered line */
+
+/* lock the page behind the overlay */
+body.ws-locked { overflow: hidden; }
+
+/* ── responsive ────────────────────────────────────────────────────────── */
+@media (max-width: 860px) {
+    .ws-tool { grid-template-columns: 1fr; gap: 1.4rem; }
+    .ws-tool--flip .ws-media { order: 0; }
+    .ws-tool::before { font-size: clamp(2.2rem, 12vw, 3.2rem); }
+    .ws-breakdown > div { grid-template-columns: 1fr; gap: 0.25rem; }
+    .ws-result { margin-left: 0; }
+}
+
+/* ── reduced motion: no tumble, instant reveal ─────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    .ws-fx, .ws-boot { display: none; }
+    .workshop, .ws-shell { transition: opacity 0.2s ease; }
+    .workshop.is-revealed::after { opacity: .35; }
+    .ws-frame, .ws-vid { animation: none; }
+    .skill-more::before, .skill-more::after { display: none; }
+    .ws-cta:hover { transform: none; }
+}
