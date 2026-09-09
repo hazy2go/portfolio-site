@@ -1853,6 +1853,7 @@
         position: absolute;
         left: 50%;
         top: 12%;
+        contain: layout paint;
         margin: 0;
         transform: translateX(-50%) translateY(-20vh) scale(1.04);
         font-family: 'Sora', sans-serif;
@@ -1863,7 +1864,9 @@
         letter-spacing: -0.04em;
         white-space: nowrap;
         padding: 0.05em 0.12em 0.22em;
-        will-change: transform, filter, opacity;
+        /* `filter` is deliberately not in will-change: hinting it defeats the
+           cached layer and forces a re-raster on every frame. */
+        will-change: transform, opacity;
     }
 
     .manifesto-word .word-state {
@@ -1962,6 +1965,28 @@
         .manifesto-hand { width: 100vw; bottom: 26%; }
         .manifesto-glow { bottom: 40%; }
         .manifesto-rule { display: none; }
+
+        /* Phone performance: everything below is animated on scroll, so any
+           effect the GPU cannot cache in a layer gets re-rasterised on every
+           single frame. These three were the cause of the scroll stutter. */
+
+        /* A drop-shadow chain on a transforming element re-renders each frame. */
+        .manifesto-hand { filter: none; }
+
+        /* mix-blend-mode forces the whole stacking context to re-composite,
+           so the hand could never be promoted to its own layer. The PNG has a
+           real alpha channel, so it still sits on the paper without it. */
+        .manifesto-hand img {
+            mix-blend-mode: normal;
+            opacity: 0.9;
+        }
+
+        /* blur() on an element whose scale is animated re-blurs every frame.
+           The radial gradient is already soft enough on its own. */
+        .manifesto-glow {
+            filter: none;
+            will-change: opacity;
+        }
         .manifesto-tagline {
             bottom: 14%;
             font-size: 0.95rem;
@@ -2045,7 +2070,10 @@
         <div class="manifesto-glow"></div>
 
         <div class="manifesto-hand" aria-hidden="true">
-            <img src="assets/hand.png" alt="" loading="lazy" width="820" height="820">
+            <img src="assets/hand-1600.webp"
+                 srcset="assets/hand-900.webp 900w, assets/hand-1600.webp 1600w"
+                 sizes="(max-width: 720px) 100vw, min(720px, 80vw)"
+                 alt="" loading="lazy" decoding="async" width="1600" height="872">
         </div>
 
         <div class="manifesto-caption manifesto-caption-bottom">
@@ -2449,40 +2477,58 @@
         let isMobile = window.innerWidth <= 720;
         let lastProgress = -1;
 
+        // Only ever write a property that actually changed. Re-assigning the
+        // same string still dirties the style and can cost a frame on phones.
+        const setStyle = (el, prop, value) => {
+            if (el._last === undefined) el._last = {};
+            if (el._last[prop] === value) return;
+            el._last[prop] = value;
+            el.style[prop] = value;
+        };
+
         const update = () => {
             raf = null;
             const rect = manifesto.getBoundingClientRect();
             const travel = rect.height - viewportH;
             const progress = clamp((-rect.top) / travel, 0, 1);
-            if (progress === lastProgress) return;
-            lastProgress = progress;
-
+            // Quantise to ~0.2% steps: finer than the eye can resolve, but it
+            // collapses a lot of redundant style writes during a fast flick.
+            const p = Math.round(progress * 500) / 500;
+            if (p === lastProgress) return;
+            lastProgress = p;
 
             const wordY = isMobile
-                ? lerp(-40, 8, progress)
-                : lerp(-26, 22, progress);
-            const wordScale = lerp(1.04, 1, progress);
-            const wordBlur = lerp(6, 0, progress);
-            const wordOpacity = clamp(progress * 4, 0, 1);
-            const handY = lerp(140, 0, Math.min(progress * 1.2, 1));
-            const handScale = lerp(0.92, 1, Math.min(progress * 1.15, 1));
-            const handOpacity = lerp(0.25, 1, Math.min(progress * 1.18, 1));
-            const glowScale = lerp(0.7, 1.15, clamp((progress - 0.55) / 0.45, 0, 1));
-            const glowOpacity = lerp(0, 0.45, clamp((progress - 0.58) / 0.28, 0, 1));
-            const taglineOpacity = lerp(0, 1, clamp((progress - 0.78) / 0.18, 0, 1));
-            const captionOpacity = clamp((progress - 0.05) / 0.25, 0, 1);
+                ? lerp(-40, 8, p)
+                : lerp(-26, 22, p);
+            const wordScale = lerp(1.04, 1, p);
+            const wordOpacity = clamp(p * 4, 0, 1);
+            const handY = lerp(140, 0, Math.min(p * 1.2, 1));
+            const handScale = lerp(0.92, 1, Math.min(p * 1.15, 1));
+            const handOpacity = lerp(0.25, 1, Math.min(p * 1.18, 1));
+            const glowScale = lerp(0.7, 1.15, clamp((p - 0.55) / 0.45, 0, 1));
+            const glowOpacity = lerp(0, 0.45, clamp((p - 0.58) / 0.28, 0, 1));
+            const taglineOpacity = lerp(0, 1, clamp((p - 0.78) / 0.18, 0, 1));
+            const captionOpacity = clamp((p - 0.05) / 0.25, 0, 1);
 
-            word.style.transform = `translate3d(-50%, ${wordY}vh, 0) scale(${wordScale})`;
-            word.style.filter = `blur(${wordBlur}px)`;
-            word.style.opacity = wordOpacity;
-            hand.style.transform = `translate3d(-50%, ${handY}px, 0) scale(${handScale})`;
-            hand.style.opacity = handOpacity;
-            glow.style.transform = `translate3d(-50%, 0, 0) scale(${glowScale})`;
-            glow.style.opacity = glowOpacity;
-            tagline.style.opacity = taglineOpacity;
-            captionTop.style.opacity = captionOpacity;
-            captionBottom.style.opacity = captionOpacity;
-
+            setStyle(word, 'transform', `translate3d(-50%, ${wordY.toFixed(2)}vh, 0) scale(${wordScale.toFixed(3)})`);
+            setStyle(word, 'opacity', wordOpacity.toFixed(3));
+            // Animating blur() re-rasterises the gradient-clipped text every
+            // frame, which is far too expensive on a phone GPU. Desktop keeps
+            // the focus-in; mobile gets the fade alone.
+            if (!isMobile) {
+                setStyle(word, 'filter', `blur(${lerp(6, 0, p).toFixed(2)}px)`);
+            }
+            setStyle(hand, 'transform', `translate3d(-50%, ${handY.toFixed(2)}px, 0) scale(${handScale.toFixed(3)})`);
+            setStyle(hand, 'opacity', handOpacity.toFixed(3));
+            // On mobile the glow only fades; scaling it would re-paint a large
+            // gradient every frame for an effect nobody can see on a phone.
+            if (!isMobile) {
+                setStyle(glow, 'transform', `translate3d(-50%, 0, 0) scale(${glowScale.toFixed(3)})`);
+            }
+            setStyle(glow, 'opacity', glowOpacity.toFixed(3));
+            setStyle(tagline, 'opacity', taglineOpacity.toFixed(3));
+            setStyle(captionTop, 'opacity', captionOpacity.toFixed(3));
+            setStyle(captionBottom, 'opacity', captionOpacity.toFixed(3));
         };
 
         const onScroll = () => {
@@ -2497,8 +2543,16 @@
 
         const onResize = () => {
             viewportH = window.innerHeight;
+            const wasMobile = isMobile;
             isMobile = window.innerWidth <= 720;
             lastProgress = -1;
+            if (wasMobile !== isMobile) {
+                // Crossing the breakpoint changes which properties we write,
+                // so clear the memo and any value the new mode won't set.
+                [word, hand, glow, tagline, captionTop, captionBottom].forEach(el => { el._last = {}; });
+                word.style.filter = '';
+                glow.style.transform = '';
+            }
             if (raf == null) raf = requestAnimationFrame(update);
         };
 
@@ -2527,21 +2581,38 @@
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav a');
 
-    window.addEventListener('scroll', () => {
+    // Offsets are measured once (and on resize) instead of on every scroll
+    // event -- reading offsetTop mid-scroll forces a synchronous layout.
+    let sectionOffsets = [];
+    const measureSections = () => {
+        sectionOffsets = Array.from(sections).map(section => ({
+            id: section.getAttribute('id'),
+            top: section.offsetTop - 200
+        }));
+    };
+    measureSections();
+    window.addEventListener('resize', measureSections, { passive: true });
+    window.addEventListener('load', measureSections);
+
+    let navRaf = null;
+    let navCurrent = null;
+    const updateNav = () => {
+        navRaf = null;
         let current = 'top';
-        sections.forEach(section => {
-            if (scrollY >= section.offsetTop - 200) {
-                current = section.getAttribute('id');
-            }
-        });
+        for (const section of sectionOffsets) {
+            if (window.scrollY >= section.top) current = section.id;
+        }
+        if (current === navCurrent) return; // nothing changed, skip the repaint
+        navCurrent = current;
 
         navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('data-section') === current) {
-                link.classList.add('active');
-            }
+            link.classList.toggle('active', link.getAttribute('data-section') === current);
         });
-    });
+    };
+
+    window.addEventListener('scroll', () => {
+        if (navRaf == null) navRaf = requestAnimationFrame(updateNav);
+    }, { passive: true });
 
     // ═══════════════════════════════════════
     // Smooth scroll for nav links

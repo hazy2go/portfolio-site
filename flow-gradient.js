@@ -76,9 +76,13 @@ class FlowGradient {
     const width = container.clientWidth || window.innerWidth;
     const height = container.clientHeight || window.innerHeight;
     
-    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+    // Phones get a cheaper buffer: antialias off and a lower pixel-ratio cap.
+    // The shader is a soft gradient, so the quality loss is invisible while the
+    // fill-rate saving is what keeps the rest of the page scrolling smoothly.
+    this.isMobile = window.matchMedia('(max-width: 720px)').matches;
+    this.renderer = new THREE.WebGLRenderer({ antialias: !this.isMobile, alpha: false, powerPreference: 'low-power' });
     this.renderer.setSize(width, height);
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, this.isMobile ? 1 : 1.5));
     container.appendChild(this.renderer.domElement);
     
     this.camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 10000);
@@ -219,7 +223,13 @@ class FlowGradient {
       onMove(e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top);
     }, { passive: true });
     
+    let resizeTimer = null;
     window.addEventListener("resize", () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => this.resize(), 150);
+    }, { passive: true });
+
+    this.resize = () => {
       const width = c.clientWidth || window.innerWidth;
       const height = c.clientHeight || window.innerHeight;
       this.camera.aspect = width / height;
@@ -229,17 +239,49 @@ class FlowGradient {
       this.mesh.geometry.dispose();
       this.mesh.geometry = new THREE.PlaneGeometry(viewSize.width, viewSize.height, 1, 1);
       this.uniforms.uResolution.value.set(width, height);
-    });
+    };
     
-    this.tick();
+    // Only render while the hero is actually on screen and the tab is visible.
+    // Previously this ran at 60fps for the whole page, starving every scroll.
+    this.running = false;
+    this.rafId = null;
+    this.visible = true;
+    this.onScreen = true;
+    this.boundTick = () => this.tick();
+
+    new IntersectionObserver((entries) => {
+      this.onScreen = entries[0].isIntersecting;
+      this.sync();
+    }, { rootMargin: '80px 0px' }).observe(c);
+
+    document.addEventListener('visibilitychange', () => {
+      this.visible = !document.hidden;
+      this.sync();
+    });
+
+    this.sync();
+  }
+
+  sync() {
+    const shouldRun = this.onScreen && this.visible;
+    if (shouldRun === this.running) return;
+    this.running = shouldRun;
+    if (shouldRun) {
+      this.clock.getDelta(); // drop the paused interval so time doesn't jump
+      this.rafId = requestAnimationFrame(this.boundTick);
+    } else if (this.rafId != null) {
+      cancelAnimationFrame(this.rafId);
+      this.rafId = null;
+    }
   }
 
   tick() {
+    if (!this.running) return;
     const delta = Math.min(this.clock.getDelta(), 0.1);
     this.touchTexture.update();
     this.uniforms.uTime.value += delta;
     this.renderer.render(this.scene, this.camera);
-    requestAnimationFrame(() => this.tick());
+    this.rafId = requestAnimationFrame(this.boundTick);
   }
 }
 

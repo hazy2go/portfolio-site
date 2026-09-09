@@ -149,16 +149,23 @@ const scrollThumb = document.querySelector('.mobile-scroll-thumb');
 let scrollTimeout;
 let isDragging = false;
 
+// Measurements are cached instead of being read on every scroll event: reading
+// offsetHeight/scrollHeight mid-scroll forces a synchronous layout each tick,
+// which is what made scrolling stutter on phones.
+let thumbMaxTop = 0;
+let thumbScrollRange = 1;
+
+function measureScrollThumb() {
+    if (!scrollThumb || !scrollTrack) return;
+    thumbScrollRange = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    thumbMaxTop = scrollTrack.offsetHeight - scrollThumb.offsetHeight;
+}
+
 function updateScrollThumb() {
     if (!scrollThumb) return;
-
-    const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const scrollPercent = window.scrollY / scrollHeight;
-    const trackHeight = scrollTrack.offsetHeight;
-    const thumbHeight = scrollThumb.offsetHeight;
-    const maxTop = trackHeight - thumbHeight;
-
-    scrollThumb.style.top = (scrollPercent * maxTop) + 'px';
+    const scrollPercent = Math.min(Math.max(window.scrollY / thumbScrollRange, 0), 1);
+    // transform instead of `top` so the thumb moves on the compositor
+    scrollThumb.style.transform = `translate3d(0, ${(scrollPercent * thumbMaxTop).toFixed(1)}px, 0)`;
 }
 
 function showScrollTrack() {
@@ -174,9 +181,18 @@ function showScrollTrack() {
 }
 
 if (scrollTrack && scrollThumb) {
+    measureScrollThumb();
+    window.addEventListener('resize', measureScrollThumb, { passive: true });
+    window.addEventListener('load', measureScrollThumb);
+
+    let thumbRaf = null;
     window.addEventListener('scroll', () => {
-        updateScrollThumb();
         showScrollTrack();
+        if (thumbRaf != null) return;
+        thumbRaf = requestAnimationFrame(() => {
+            thumbRaf = null;
+            updateScrollThumb();
+        });
     }, { passive: true });
 
     // Touch/drag to scroll
@@ -217,13 +233,15 @@ if (scrollTrack && scrollThumb) {
 
 // ===== Navbar Background on Scroll =====
 const nav = document.querySelector('.nav');
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 100) {
-        nav.style.background = 'rgba(10, 10, 10, 0.95)';
-    } else {
-        nav.style.background = 'rgba(10, 10, 10, 0.8)';
-    }
-});
+if (nav) {
+    let navScrolled = null;
+    window.addEventListener('scroll', () => {
+        const scrolled = window.scrollY > 100;
+        if (scrolled === navScrolled) return; // avoid a style write every tick
+        navScrolled = scrolled;
+        nav.style.background = scrolled ? 'rgba(10, 10, 10, 0.95)' : 'rgba(10, 10, 10, 0.8)';
+    }, { passive: true });
+}
 
 // ===== Smooth Scroll for Nav Links =====
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -696,32 +714,49 @@ tubelightItems.forEach(item => {
     });
 });
 
-// Update active state on scroll
+// Update active state on scroll.
+// Section offsets are measured once (and on resize) rather than on every scroll
+// event, so this no longer forces a layout per tick.
 const navSections = document.querySelectorAll('section[id]');
-window.addEventListener('scroll', () => {
-    let current = 'home';
-    const scrollY = window.pageYOffset;
-    
-    navSections.forEach(section => {
-        const sectionTop = section.offsetTop - 200;
-        if (scrollY >= sectionTop) {
-            current = section.getAttribute('id');
+let navOffsets = [];
+
+function measureNavOffsets() {
+    navOffsets = Array.from(navSections).map(section => ({
+        id: section.getAttribute('id'),
+        top: section.offsetTop - 200
+    }));
+}
+
+if (tubelightItems.length > 0) {
+    measureNavOffsets();
+    window.addEventListener('resize', measureNavOffsets, { passive: true });
+    window.addEventListener('load', measureNavOffsets);
+
+    let tubelightRaf = null;
+    let tubelightCurrent = null;
+
+    const updateTubelight = () => {
+        tubelightRaf = null;
+        const scrollY = window.pageYOffset;
+
+        let current = 'home';
+        if (scrollY >= 200) {
+            for (const section of navOffsets) {
+                if (scrollY >= section.top) current = section.id;
+            }
         }
-    });
-    
-    tubelightItems.forEach(item => {
-        item.classList.remove('active');
-        if (item.getAttribute('data-section') === current) {
-            item.classList.add('active');
-        }
-    });
-    
-    // Handle home when at top
-    if (scrollY < 200) {
-        tubelightItems.forEach(item => item.classList.remove('active'));
-        document.querySelector('.tubelight-nav-item[data-section="home"]')?.classList.add('active');
-    }
-});
+        if (current === tubelightCurrent) return; // nothing to repaint
+        tubelightCurrent = current;
+
+        tubelightItems.forEach(item => {
+            item.classList.toggle('active', item.getAttribute('data-section') === current);
+        });
+    };
+
+    window.addEventListener('scroll', () => {
+        if (tubelightRaf == null) tubelightRaf = requestAnimationFrame(updateTubelight);
+    }, { passive: true });
+}
 
 // ===== Glare Cards Mobile Carousel Dots =====
 const glareCardsContainer = document.querySelector('.glare-cards');
