@@ -2103,6 +2103,52 @@
         .build, .build-shot img { transition: none; }
     }
 </style>
+<style id="manifesto-scroll">
+    /* The manifesto animation used to be positioned from JavaScript on every
+       scroll event. On phones scrolling runs on a separate thread, so those
+       updates always arrived a frame or two late, which read as stutter.
+       Where the browser supports scroll-driven animations the motion is tied
+       to the scroll position directly and never touches JavaScript. */
+    .manifesto { --wy0: -26vh; --wy1: 22vh; }
+    @media (max-width: 720px) {
+        .manifesto { --wy0: -40vh; --wy1: 8vh; height: 165vh; }   /* longer runway: the same motion over more scroll */
+    }
+    @supports (animation-timeline: view()) {
+        @media (prefers-reduced-motion: no-preference) {
+            .manifesto { view-timeline: --manifesto block; }
+            .manifesto-word, .manifesto-hand, .manifesto-glow, .manifesto-tagline, .manifesto-caption {
+                animation-duration: 1ms; animation-timing-function: linear; animation-fill-mode: both;
+                animation-timeline: --manifesto; animation-range: contain 0% contain 100%;
+            }
+            .manifesto-word { animation-name: mf-word; }
+            .manifesto-hand { animation-name: mf-hand; }
+            .manifesto-glow { animation-name: mf-glow; }
+            .manifesto-tagline { animation-name: mf-tagline; }
+            .manifesto-caption { animation-name: mf-caption; }
+            @media (min-width: 721px) {
+                .manifesto-word { animation-name: mf-word, mf-word-focus; }
+                .manifesto-glow { animation-name: mf-glow, mf-glow-grow; }
+            }
+        }
+    }
+    @keyframes mf-word {
+        0%   { transform: translate3d(-50%, var(--wy0), 0) scale(1.04); opacity: 0; }
+        25%  { opacity: 1; }
+        100% { transform: translate3d(-50%, var(--wy1), 0) scale(1); opacity: 1; }
+    }
+    @keyframes mf-word-focus { 0% { filter: blur(6px); } 100% { filter: blur(0); } }
+    @keyframes mf-hand {
+        0%   { transform: translate3d(-50%, 140px, 0) scale(0.92); opacity: 0.25; }
+        85%, 100% { transform: translate3d(-50%, 0, 0) scale(1); opacity: 1; }
+    }
+    @keyframes mf-glow { 0%, 58% { opacity: 0; } 86%, 100% { opacity: 0.45; } }
+    @keyframes mf-glow-grow {
+        0%, 55% { transform: translate3d(-50%, 0, 0) scale(0.7); }
+        100% { transform: translate3d(-50%, 0, 0) scale(1.15); }
+    }
+    @keyframes mf-tagline { 0%, 78% { opacity: 0; } 96%, 100% { opacity: 1; } }
+    @keyframes mf-caption { 0%, 5% { opacity: 0; } 30%, 100% { opacity: 1; } }
+</style>
 </head>
 <body>
 
@@ -2534,7 +2580,9 @@
     // Manifesto scroll-storytelling: word "community" lands in the open hand.
     const manifesto = document.querySelector('#manifesto');
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (manifesto && !reduced) {
+    // Browsers with scroll-driven animations run this in CSS (see #manifesto-scroll).
+    const cssDriven = window.CSS && CSS.supports && CSS.supports('animation-timeline: view()');
+    if (manifesto && !reduced && !cssDriven) {
         const word = manifesto.querySelector('.manifesto-word');
         const hand = manifesto.querySelector('.manifesto-hand');
         const glow = manifesto.querySelector('.manifesto-glow');
@@ -2550,6 +2598,8 @@
         let viewportH = window.innerHeight;
         let isMobile = window.innerWidth <= 720;
         let lastProgress = -1;
+        let eased = -1;
+        let viewportW = window.innerWidth;
 
         // Only ever write a property that actually changed. Re-assigning the
         // same string still dirties the style and can cost a frame on phones.
@@ -2564,10 +2614,13 @@
             raf = null;
             const rect = manifesto.getBoundingClientRect();
             const travel = rect.height - viewportH;
-            const progress = clamp((-rect.top) / travel, 0, 1);
-            // Quantise to ~0.2% steps: finer than the eye can resolve, but it
-            // collapses a lot of redundant style writes during a fast flick.
-            const p = Math.round(progress * 500) / 500;
+            const target = clamp((-rect.top) / travel, 0, 1);
+            // Ease toward the scroll position instead of snapping to it. Touch
+            // scrolling reports position in uneven steps; easing hides them.
+            eased = eased < 0 ? target : eased + (target - eased) * 0.2;
+            if (Math.abs(target - eased) < 0.0015) eased = target;
+            else raf = requestAnimationFrame(update);
+            const p = Math.round(eased * 1000) / 1000;
             if (p === lastProgress) return;
             lastProgress = p;
 
@@ -2616,6 +2669,11 @@
         io.observe(manifesto);
 
         const onResize = () => {
+            // Phones fire resize while the address bar slides away mid-scroll.
+            // Re-measuring the height then makes the animation jump, so only
+            // re-measure when the width changes (rotation, real resize).
+            if (window.innerWidth === viewportW) return;
+            viewportW = window.innerWidth;
             viewportH = window.innerHeight;
             const wasMobile = isMobile;
             isMobile = window.innerWidth <= 720;
