@@ -2015,8 +2015,7 @@
 
 <style id="revamp">
     /* hero: name and role */
-    .hero { height: 48vh; max-height: 48vh; min-height: 420px; }
-    @media (min-width: 769px) { .hero-right { padding-top: 13vh; } }
+    @media (min-width: 769px) { .hero-right { padding-top: 11vh; } }
     .hero-id { font-family: 'Sora', sans-serif; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(248, 246, 241, 0.82); margin-bottom: 1rem; opacity: 0; animation: slideUp 0.7s ease forwards 0.15s; text-shadow: 0 1px 12px rgba(0, 0, 0, 0.6); }
 
     /* clients: a plain roster instead of tiles */
@@ -2096,7 +2095,8 @@
         .featured-visual { max-width: 260px; }
     }
     @media (max-width: 768px) {
-        .hero { height: auto; max-height: none; min-height: 0; }
+        .hero { min-height: 300px; }
+        .hero-id { font-size: 0.68rem; margin-bottom: 0.7rem; }
     }
     @media (prefers-reduced-motion: reduce) {
         .hero-id { opacity: 1; animation: none; }
