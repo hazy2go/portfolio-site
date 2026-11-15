@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hasan Toprak — Community Architect</title>
-    <meta name="description" content="I build communities that show up, stay loyal, and carry projects forward. 5+ years in Web3. I also build Discord and Telegram bots.">
+    <meta name="description" content="I build communities that show up, stay loyal, and carry projects forward. 5+ years of community management. I also build Discord and Telegram bots.">
     <link rel="canonical" href="https://hasantoprak.xyz/">
 
 
@@ -13,18 +13,18 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://hasantoprak.xyz/">
 <meta property="og:title" content="Hasan Toprak — Community Architect">
-<meta property="og:description" content="Building communities that outlast bear markets. 5+ years in Web3.">
+<meta property="og:description" content="Building communities that last. 5+ years of community management, plus the bots and tools to run them.">
 <meta property="og:image" content="https://hasantoprak.xyz/profile.jpg">
 <meta name="theme-color" content="#c45c3e">
 
-<link rel="icon" type="image/jpeg" href="profile.jpg">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231a1714'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-family='Arial,Helvetica,sans-serif' font-weight='700' font-size='30' fill='%23d4735a'%3EHT%3C/text%3E%3C/svg%3E">
 
 <!-- Fonts: Professional + Approachable -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Nunito+Sans:opsz,wght@6..12,300;6..12,400;6..12,500;6..12,600;6..12,700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="workshop.css?v=10">
+<link rel="stylesheet" href="workshop.css?v=11">
 
 <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
 
@@ -2012,6 +2012,97 @@
 </style>
 
 
+
+<style id="revamp">
+    /* hero: name and role */
+    .hero { height: 48vh; max-height: 48vh; min-height: 420px; }
+    @media (min-width: 769px) { .hero-right { padding-top: 13vh; } }
+    .hero-id { font-family: 'Sora', sans-serif; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(248, 246, 241, 0.82); margin-bottom: 1rem; opacity: 0; animation: slideUp 0.7s ease forwards 0.15s; text-shadow: 0 1px 12px rgba(0, 0, 0, 0.6); }
+
+    /* clients: a plain roster instead of tiles */
+    .client-list { list-style: none; max-width: 1000px; margin: 0 auto; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: clamp(2rem, 5vw, 4.5rem); }
+    .client-list li { border-bottom: 1px solid rgba(26, 23, 20, 0.13); }
+    .client-list li:nth-child(-n+2) { border-top: 1px solid rgba(26, 23, 20, 0.13); }
+    .client-row { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto 1.2rem; align-items: center; gap: 1.1rem; padding: 1.25rem 0.25rem; text-decoration: none; color: var(--ink); }
+    .client-logo { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; background: #fff; transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1); }
+    .client-logo--mark { object-fit: contain; padding: 7px; background: #111; }
+    .client-row-name { font-family: 'Sora', sans-serif; font-size: clamp(1.15rem, 1.8vw, 1.45rem); font-weight: 600; letter-spacing: -0.01em; transition: color 0.25s ease; }
+    .client-row-type { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--slate); text-align: right; }
+    .client-row-arrow { color: var(--rust); opacity: 0; transform: translateX(-8px); transition: opacity 0.25s ease, transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1); }
+    @media (hover: hover) {
+        .client-row:hover .client-row-name { color: var(--rust); }
+        .client-row:hover .client-row-arrow { opacity: 1; transform: none; }
+        .client-row:hover .client-logo { transform: scale(1.08); }
+    }
+    @media (hover: none) { .client-row-arrow { opacity: 1; transform: none; } }
+    .client-row:focus-visible { outline: 2px solid var(--rust); outline-offset: 2px; }
+    @media (max-width: 760px) {
+        .client-list { grid-template-columns: 1fr; }
+        .client-list li:nth-child(2) { border-top: 0; }
+        .client-row { grid-template-columns: 44px minmax(0, 1fr) 1.2rem; row-gap: 0.1rem; padding: 1rem 0.25rem; }
+        .client-logo { width: 44px; height: 44px; grid-row: 1 / span 2; }
+        .client-row-name { grid-column: 2; }
+        .client-row-type { grid-column: 2; grid-row: 2; text-align: left; }
+        .client-row-arrow { grid-column: 3; grid-row: 1 / span 2; }
+    }
+
+    /* Reign of Titans clip */
+    .featured-visual { justify-self: center; width: 100%; max-width: 330px; }
+    .rot-preview { display: block; width: 100%; aspect-ratio: 9 / 16; object-fit: cover; border-radius: 6px; background: #000; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45); pointer-events: none; }
+    .rot-preview::-webkit-media-controls, .rot-preview::-webkit-media-controls-start-playback-button { display: none !important; -webkit-appearance: none; }
+
+    /* builds */
+    .builds { padding: var(--space-xl) 8vw; background: var(--paper); }
+    .builds-header { text-align: center; max-width: 720px; margin: 0 auto var(--space-md); }
+    .builds-header p { color: var(--slate); font-size: 1.05rem; }
+    .builds-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; max-width: 1150px; margin: 0 auto; }
+    .build { background: #fff; border-radius: 4px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); }
+    .build.reveal.visible, .build.reveal.active { transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.35s ease; }
+    .build-shot { aspect-ratio: 16 / 10; overflow: hidden; background: var(--midnight); }
+    .build-shot img { width: 100%; height: 100%; object-fit: cover; object-position: left top; transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1); }
+    .build-shot--art img { object-position: center; }
+    .build-body { padding: 1.5rem 1.6rem 1.7rem; display: flex; flex-direction: column; flex: 1; }
+    .build-kind { font-family: 'Sora', sans-serif; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rust); }
+    .build h3 { font-family: 'Sora', sans-serif; font-size: 1.35rem; font-weight: 600; margin: 0.35rem 0 0.45rem; }
+    .build-lede { color: var(--slate); font-size: 0.95rem; }
+    .build-result { margin-top: auto; padding-top: 1rem; font-size: 0.9rem; color: var(--ink); }
+    .build-result::before { content: ""; display: block; height: 1px; background: var(--cream); margin: 1.1rem 0 1rem; }
+    .build-result b { display: block; font-family: 'Sora', sans-serif; font-size: 0.68rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rust); margin-bottom: 0.3rem; }
+    .builds-foot { text-align: center; margin-top: var(--space-md); }
+    .builds-foot .btn { border: 0; cursor: pointer; font-family: inherit; }
+    @media (hover: hover) {
+        .build:hover { transform: translateY(-5px); box-shadow: 0 18px 44px rgba(0, 0, 0, 0.1); }
+        .build:hover .build-shot img { transform: scale(1.04); }
+    }
+
+    /* five strengths */
+    .strengths { max-width: 1000px; margin: 0 auto; border-top: 1px solid var(--cream); }
+    .strength { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 2rem; align-items: baseline; padding: 1.6rem 0; border-bottom: 1px solid var(--cream); }
+    .strength h3 { font-family: 'Sora', sans-serif; font-size: clamp(1.2rem, 2vw, 1.55rem); font-weight: 600; letter-spacing: -0.01em; line-height: 1.25; transition: color 0.25s ease; }
+    .strength p { color: var(--slate); font-size: 1rem; }
+    @media (hover: hover) {
+        .strengths:hover .strength:not(:hover) h3, .strengths:hover .strength:not(:hover) p { opacity: 0.45; }
+        .strength h3, .strength p { transition: opacity 0.25s ease, color 0.25s ease; }
+        .strength:hover h3 { color: var(--rust); }
+    }
+    .skills-fine { max-width: 1000px; margin: var(--space-md) auto 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.75rem; font-size: 0.86rem; color: var(--slate); line-height: 1.6; }
+    .skills-fine b { display: block; font-family: 'Sora', sans-serif; font-size: 0.78rem; font-weight: 600; color: var(--ink); margin-bottom: 0.4rem; }
+    .skills-fine .skill-more { display: block; margin-top: 0.6rem; }
+
+    @media (max-width: 900px) {
+        .builds-grid { grid-template-columns: 1fr; max-width: 520px; }
+        .strength { grid-template-columns: 1fr; gap: 0.4rem; padding: 1.3rem 0; }
+        .skills-fine { grid-template-columns: 1fr; gap: 1.25rem; }
+        .featured-visual { max-width: 260px; }
+    }
+    @media (max-width: 768px) {
+        .hero { height: auto; max-height: none; min-height: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .hero-id { opacity: 1; animation: none; }
+        .build, .build-shot img { transition: none; }
+    }
+</style>
 </head>
 <body>
 
@@ -2031,6 +2122,7 @@
     <div class="hero-right">
         <div id="heroGradient"></div>
         <div class="hero-headline">
+            <p class="hero-id">Hasan Toprak · Community architect</p>
             <h1 class="hero-title-right">Building<br><em>communities</em><br>that last</h1>
         </div>
     </div>
@@ -2040,7 +2132,7 @@
 <!-- Hero Intro -->
 <section class="hero-intro">
     <div class="container">
-        <p class="hero-subtitle">The bridge between your project and the people who believe in it. 5+ years making Web3 communities that survive bear markets and show up daily.</p>
+        <p class="hero-subtitle">The bridge between your project and the people who believe in it. 5+ years building communities that survive the hard stretches and show up daily.</p>
         <div class="hero-cta">
             <a href="#contact" class="btn btn-primary">Let's talk</a>
             <a href="#experience" class="btn btn-ghost">
@@ -2094,10 +2186,10 @@
     </div>
     <div class="about-content reveal reveal-delay-1">
         <span class="section-eyebrow">A bit about me</span>
-        <h2 class="section-title">Community builder, bot developer, growth strategist</h2>
+        <h2 class="section-title">Community builder, developer, growth strategist</h2>
         <div class="about-text">
             <p>My role sits at the intersection of project and people. When your community has questions, I'm there. When your team needs to understand what members actually think, I turn that feedback into something you can act on.</p>
-            <p>Bear markets, product launches, crises, rapid growth—I've guided communities through all of it. I also build the tools that make this work: Discord and Telegram bots with economy systems, security features, and engagement mechanics.</p>
+            <p>Downturns, product launches, crises, rapid growth: I've guided communities through all of it. I also build the tools that make this work: Discord and Telegram bots with economy systems, security features, and engagement mechanics.</p>
             <p class="about-stats">10+ projects managed · 5+ years experience · 3 languages</p>
         </div>
         <div class="about-details">
@@ -2127,74 +2219,44 @@
         <span class="section-eyebrow">Trusted by</span>
         <h2 class="section-title">Who I've worked with</h2>
     </div>
-    <div class="glare-cards">
-        <a href="https://www.sodax.com" target="_blank" rel="noopener noreferrer" class="glare-card reveal">
-            <div class="glare-card-inner">
-                <div class="glare-card-content">
-                    <div class="logo-container logo-sodax"><img src="logos/sodax.jpg" alt="SODAX logo" width="90" height="90"></div>
-                    <span class="client-name">SODAX</span>
-                    <span class="client-type">Cross-chain DeFi</span>
-                </div>
-                <div class="glare-card-glare"></div>
-                <div class="glare-card-foil"></div>
-            </div>
-        </a>
-        <a href="https://reignoftitans.gg/" target="_blank" rel="noopener noreferrer" class="glare-card reveal reveal-delay-1">
-            <div class="glare-card-inner">
-                <div class="glare-card-content">
-                    <div class="logo-container logo-rot"><img src="logos/rot.png" alt="Reign of Titans logo" width="90" height="90"></div>
-                    <span class="client-name">Reign of Titans</span>
-                    <span class="client-type">Play-to-Own Gaming</span>
-                </div>
-                <div class="glare-card-glare"></div>
-                <div class="glare-card-foil"></div>
-            </div>
-        </a>
-        <a href="https://superteam.fun" target="_blank" rel="noopener noreferrer" class="glare-card reveal reveal-delay-2">
-            <div class="glare-card-inner">
-                <div class="glare-card-content">
-                    <div class="logo-container logo-superteam"><img src="logos/superteam.jpg" alt="Superteam logo" width="90" height="90" loading="lazy"></div>
-                    <span class="client-name">Superteam</span>
-                    <span class="client-type">Solana Ecosystem</span>
-                </div>
-                <div class="glare-card-glare"></div>
-                <div class="glare-card-foil"></div>
-            </div>
-        </a>
-        <a href="https://www.pathfinders.gg/" target="_blank" rel="noopener noreferrer" class="glare-card reveal reveal-delay-3">
-            <div class="glare-card-inner">
-                <div class="glare-card-content">
-                    <div class="logo-container logo-pathfinders"><img src="logos/pathfinders.png" alt="Pathfinders logo" width="90" height="90" loading="lazy"></div>
-                    <span class="client-name">Pathfinders</span>
-                    <span class="client-type">LST-NFT</span>
-                </div>
-                <div class="glare-card-glare"></div>
-                <div class="glare-card-foil"></div>
-            </div>
-        </a>
-        <a href="https://linktr.ee/SOL_Decoder" target="_blank" rel="noopener noreferrer" class="glare-card reveal">
-            <div class="glare-card-inner">
-                <div class="glare-card-content">
-                    <div class="logo-container logo-soldecoder"><img src="logos/soldecoder.jpeg" alt="SOLDecoder logo" width="90" height="90" loading="lazy"></div>
-                    <span class="client-name">SOLDecoder</span>
-                    <span class="client-type">AI & DeFi Tools</span>
-                </div>
-                <div class="glare-card-glare"></div>
-                <div class="glare-card-foil"></div>
-            </div>
-        </a>
-        <a href="https://upshot.cards/" target="_blank" rel="noopener noreferrer" class="glare-card reveal reveal-delay-1">
-            <div class="glare-card-inner">
-                <div class="glare-card-content">
-                    <div class="logo-container logo-upshot"><img src="logos/upshot.svg" alt="Upshot logo" width="90" height="90" loading="lazy"></div>
-                    <span class="client-name">Upshot</span>
-                    <span class="client-type">Prediction market cards</span>
-                </div>
-                <div class="glare-card-glare"></div>
-                <div class="glare-card-foil"></div>
-            </div>
-        </a>
-    </div>
+    <ul class="client-list">
+        <li class="reveal"><a class="client-row" href="https://upshot.cards/" target="_blank" rel="noopener noreferrer">
+            <img class="client-logo client-logo--mark" src="logos/upshot.svg" alt="" width="48" height="48">
+            <span class="client-row-name">Upshot</span>
+            <span class="client-row-type">Prediction market cards</span>
+            <span class="client-row-arrow" aria-hidden="true">→</span>
+        </a></li>
+        <li class="reveal"><a class="client-row" href="https://www.sodax.com" target="_blank" rel="noopener noreferrer">
+            <img class="client-logo" src="logos/sodax.jpg" alt="" width="48" height="48">
+            <span class="client-row-name">SODAX</span>
+            <span class="client-row-type">Cross-chain DeFi</span>
+            <span class="client-row-arrow" aria-hidden="true">→</span>
+        </a></li>
+        <li class="reveal reveal-delay-1"><a class="client-row" href="https://reignoftitans.gg/" target="_blank" rel="noopener noreferrer">
+            <img class="client-logo" src="logos/rot.png" alt="" width="48" height="48" loading="lazy">
+            <span class="client-row-name">Reign of Titans</span>
+            <span class="client-row-type">Play-to-own gaming</span>
+            <span class="client-row-arrow" aria-hidden="true">→</span>
+        </a></li>
+        <li class="reveal reveal-delay-1"><a class="client-row" href="https://superteam.fun" target="_blank" rel="noopener noreferrer">
+            <img class="client-logo" src="logos/superteam.jpg" alt="" width="48" height="48" loading="lazy">
+            <span class="client-row-name">Superteam</span>
+            <span class="client-row-type">Solana ecosystem</span>
+            <span class="client-row-arrow" aria-hidden="true">→</span>
+        </a></li>
+        <li class="reveal reveal-delay-2"><a class="client-row" href="https://www.pathfinders.gg/" target="_blank" rel="noopener noreferrer">
+            <img class="client-logo" src="logos/pathfinders.png" alt="" width="48" height="48" loading="lazy">
+            <span class="client-row-name">Pathfinders</span>
+            <span class="client-row-type">LST-NFT</span>
+            <span class="client-row-arrow" aria-hidden="true">→</span>
+        </a></li>
+        <li class="reveal reveal-delay-2"><a class="client-row" href="https://linktr.ee/SOL_Decoder" target="_blank" rel="noopener noreferrer">
+            <img class="client-logo" src="logos/soldecoder.jpeg" alt="" width="48" height="48" loading="lazy">
+            <span class="client-row-name">SOLDecoder</span>
+            <span class="client-row-type">AI &amp; DeFi tools</span>
+            <span class="client-row-arrow" aria-hidden="true">→</span>
+        </a></li>
+    </ul>
 </section>
 
 <!-- Featured Project -->
@@ -2209,7 +2271,7 @@
                 <span>Backed by Anheuser-Busch / AB InBev</span>
             </div>
             <h2 class="section-title">Reign of Titans</h2>
-            <p class="featured-desc">Running end-to-end community operations for AB InBev's first blockchain gaming venture. Proof that Web3 community management can meet Fortune 500 standards.</p>
+            <p class="featured-desc">Running end-to-end community operations for AB InBev's first blockchain gaming venture. Community management run to Fortune 500 standards.</p>
             <ul class="featured-list">
                 <li>Lead three regional teams across Global, India, and LATAM</li>
                 <li>Manage four social media channels with consistent voice</li>
@@ -2218,13 +2280,54 @@
             </ul>
             <button class="video-btn" id="openVideoModal">
                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                <span>See it in action</span>
+                <span>Watch with sound</span>
             </button>
         </div>
         <div class="featured-visual reveal reveal-delay-2">
-            <img src="logos/rot_project.jpg" alt="Reign of Titans game screenshot" width="600" height="400" loading="lazy">
+            <video class="rot-preview" muted loop playsinline webkit-playsinline disablepictureinpicture preload="none" poster="rot_videos/preview.jpg" aria-label="Clips from a Reign of Titans tournament"><source src="rot_videos/preview.mp4" type="video/mp4"></video>
             <div class="featured-label">Fortune 500</div>
         </div>
+    </div>
+</section>
+
+<!-- Builds: the workshop, surfaced -->
+<section class="builds" id="builds">
+    <div class="builds-header reveal">
+        <span class="section-eyebrow">Built, not bought</span>
+        <h2 class="section-title">The stuff I build when a problem won't go away</h2>
+        <p>Most clients hire me for community. Then something breaks that no off-the-shelf tool fixes, so I build the fix. These ship as part of the work, not a separate invoice.</p>
+    </div>
+    <div class="builds-grid">
+        <article class="build reveal">
+            <div class="build-shot"><img src="img/sentinel.png" alt="Sentinel security panel inside Discord" loading="lazy"></div>
+            <div class="build-body">
+                <span class="build-kind">Community + security</span>
+                <h3>Sentinel</h3>
+                <p class="build-lede">An AI community manager that rewrites its own defenses as scammers evolve.</p>
+                <p class="build-result"><b>Result</b>Threats get caught as they surface, not in a postmortem. One bot replaces a stack of single-purpose tools.</p>
+            </div>
+        </article>
+        <article class="build reveal reveal-delay-1">
+            <div class="build-shot build-shot--art"><img src="img/hato.jpg" alt="Hato, a cold outreach platform" loading="lazy"></div>
+            <div class="build-body">
+                <span class="build-kind">AI outreach</span>
+                <h3>Hato</h3>
+                <p class="build-lede">Send like a person, scale like a machine. Cold outreach you can run by hand, or hand off to AI end to end.</p>
+                <p class="build-result"><b>Result</b>~$97/mo per seat down to $0 per-contact, with the research and writing handled by AI instead of by hand.</p>
+            </div>
+        </article>
+        <article class="build reveal reveal-delay-2">
+            <div class="build-shot"><img src="img/nftroles.png" alt="nftroles.xyz verification page" loading="lazy"></div>
+            <div class="build-body">
+                <span class="build-kind">Token gating</span>
+                <h3>nftroles.xyz</h3>
+                <p class="build-lede">Token-gated Discord roles across Solana, Base, and Ethereum.</p>
+                <p class="build-result"><b>Result</b>Hundreds a year down to self-hosted and theirs, one system covering three chains.</p>
+            </div>
+        </article>
+    </div>
+    <div class="builds-foot reveal">
+        <button type="button" class="btn btn-primary" data-ws-open>Open the build log</button>
     </div>
 </section>
 
@@ -2239,8 +2342,8 @@
             <div class="timeline-marker"></div>
             <div class="timeline-card">
                 <span class="timeline-date">Apr 2026 – Now</span>
-                <h3>Community Manager</h3>
-                <span class="timeline-company">Upshot</span>
+                <h3>Upshot</h3>
+                <span class="timeline-company">Community Manager</span>
                 <p>Building community for the first high-stakes prediction card platform on Base. Mystery packs of prediction cards across crypto, sports, and culture.</p>
             </div>
         </div>
@@ -2248,8 +2351,8 @@
             <div class="timeline-marker"></div>
             <div class="timeline-card">
                 <span class="timeline-date">Feb 2026 – Now</span>
-                <h3>Community Manager</h3>
-                <span class="timeline-company">SODAX</span>
+                <h3>SODAX</h3>
+                <span class="timeline-company">Community Manager</span>
                 <p>Building community for cross-chain DeFi platform. Swap, save, and borrow across EVM networks.</p>
             </div>
         </div>
@@ -2257,8 +2360,8 @@
             <div class="timeline-marker"></div>
             <div class="timeline-card">
                 <span class="timeline-date">2024 – Now</span>
-                <h3>Community Manager</h3>
-                <span class="timeline-company">Reign of Titans (AB InBev)</span>
+                <h3>Reign of Titans (AB InBev)</h3>
+                <span class="timeline-company">Community Manager</span>
                 <p>Leading three regional teams for play-to-own battle game. Managing social and $20K tournaments.</p>
             </div>
         </div>
@@ -2266,8 +2369,8 @@
             <div class="timeline-marker"></div>
             <div class="timeline-card">
                 <span class="timeline-date">Apr 2023 – 2025</span>
-                <h3>Community Manager</h3>
-                <span class="timeline-company">Superteam Turkey</span>
+                <h3>Superteam Turkey</h3>
+                <span class="timeline-company">Community Manager</span>
                 <p>Supporting Solana ecosystem projects in Turkey through launches and growth initiatives.</p>
             </div>
         </div>
@@ -2275,8 +2378,8 @@
             <div class="timeline-marker"></div>
             <div class="timeline-card">
                 <span class="timeline-date">May 2022 – Now</span>
-                <h3>Community Advisor & Team Manager</h3>
-                <span class="timeline-company">SOLDecoder</span>
+                <h3>SOLDecoder</h3>
+                <span class="timeline-company">Community Advisor & Team Manager</span>
                 <p>Developing AI-powered Discord bots enhancing community interactivity.</p>
             </div>
         </div>
@@ -2296,50 +2399,21 @@
 <section class="skills" id="skills">
     <div class="geo-element geo-circle"></div>
     <div class="skills-header reveal">
-        <span class="section-eyebrow">Capabilities</span>
-        <h2 class="section-title">What I bring to the table</h2>
+        <span class="section-eyebrow">What a team gets</span>
+        <h2 class="section-title">One hire, five jobs</h2>
     </div>
-    <div class="skills-grid">
-        <div class="skill-column reveal">
-            <div class="skill-category">
-                <h3>Community & Strategy</h3>
-                <ul class="skill-list">
-                    <li>24/7 community management</li>
-                    <li>Moderator hiring & training</li>
-                    <li>Social media management</li>
-                    <li>Event & tournament planning</li>
-                    <li>Content creation & campaigns</li>
-                    <li>Feedback analysis & reporting</li>
-                </ul>
-            </div>
-        </div>
-        <div class="skill-column reveal reveal-delay-1">
-            <div class="skill-category">
-                <h3>Technical</h3>
-                <ul class="skill-list">
-                    <li>Discord bot development</li>
-                    <li>Telegram bot development</li>
-                    <li>Database setup & management</li>
-                    <li>Workflow automation</li>
-                    <li>Gamification systems</li>
-                    <li>Server security & anti-raid</li>
-                </ul>
-                <button type="button" class="skill-more" id="workshop-trigger" data-text="see more?" aria-haspopup="dialog" aria-controls="workshop"><span class="skill-more__txt">see more?</span></button>
-            </div>
-        </div>
-        <div class="skill-column reveal reveal-delay-2">
-            <div class="skill-category">
-                <h3>Web3</h3>
-                <ul class="skill-list">
-                    <li>Cross-chain fluency</li>
-                    <li>NFT community management</li>
-                    <li>Gaming & DeFi experience</li>
-                    <li>Whitelist & partnerships</li>
-                    <li>Reward system design</li>
-                    <li>Ecosystem building</li>
-                </ul>
-            </div>
-        </div>
+    <div class="strengths">
+        <div class="strength reveal"><h3>Runs several ops teams at once</h3><p>Three regional teams at Reign of Titans across Global, India and LATAM, with moderators hired and trained, and four channels in one voice.</p></div>
+        <div class="strength reveal"><h3>Speaks developer</h3><p>A technical background, so product and engineering get answers in their own language and the community gets the truth.</p></div>
+        <div class="strength reveal"><h3>Has seen every market</h3><p>Five years of downturns, product launches, crises and rapid growth.</p></div>
+        <div class="strength reveal"><h3>A Swiss tool for every team</h3><p>Community, moderation, content, events, automation and security from one person.</p></div>
+        <div class="strength reveal"><h3>Gets it done</h3><p>If the tool does not exist, I build it. Sentinel, Hato and nftroles.xyz all started as a client problem.</p></div>
+    </div>
+    <div class="skills-fine reveal">
+        <div><b>Community &amp; strategy</b>24/7 community management, moderator hiring and training, social media, events and tournaments, content and campaigns, feedback analysis and reporting.</div>
+        <div><b>Technical</b>Discord and Telegram bots, databases, workflow automation, gamification systems, server security and anti-raid.
+            <button type="button" class="skill-more" id="workshop-trigger" data-text="see more?" aria-haspopup="dialog" aria-controls="workshop"><span class="skill-more__txt">see more?</span></button></div>
+        <div><b>Web3</b>Cross-chain fluency, NFT communities, gaming and DeFi, whitelists and partnerships, reward system design, ecosystem building.</div>
     </div>
 </section>
 
@@ -2351,8 +2425,8 @@
             <p class="impact-label">Members engaged across projects</p>
         </div>
         <div class="impact-item reveal reveal-delay-1">
-            <span class="impact-number" data-target="100">0</span><span class="impact-suffix">%</span>
-            <p class="impact-label">Full-stack ops so founders can build</p>
+            <span class="impact-number" data-target="10">0</span><span class="impact-suffix">+</span>
+            <p class="impact-label">Projects managed end to end</p>
         </div>
         <div class="impact-item reveal reveal-delay-2">
             <span class="impact-number" data-target="5">0</span><span class="impact-suffix">+</span>
@@ -2793,14 +2867,14 @@
             <!-- 01 · HazyMails -->
             <article class="ws-tool" data-i="01">
                 <figure class="ws-media">
-                    <video class="ws-vid" muted loop playsinline preload="none" onerror="this.classList.add('ws-vid--missing')">
+                    <video class="ws-vid" muted loop playsinline webkit-playsinline disablepictureinpicture disableremoteplayback tabindex="-1" aria-hidden="true" preload="none" onerror="this.classList.add('ws-vid--missing')">
                         <source src="video/hayzmails.mp4" type="video/mp4">
                     </video>
-                    <div class="ws-frame ws-frame--light"><img class="ws-shot" src="img/hazymails.png" alt="HazyMails Outreach analytics dashboard" loading="lazy"></div>
+                    <div class="ws-frame ws-frame--light"><img class="ws-shot" src="img/hazymails.png" alt="Hato outreach analytics dashboard" loading="lazy"></div>
                 </figure>
                 <div class="ws-body">
                     <p class="ws-idx">01 / ai outreach</p>
-                    <h3>HazyMails</h3>
+                    <h3>Hato</h3>
                     <p class="ws-lede">Cold outreach you can run by hand, or hand off to AI end to end.</p>
                     <dl class="ws-breakdown">
                         <div><dt>Problem</dt><dd>A client wanted real outbound volume but was stuck between expensive per-seat SaaS and hours of manual list-building and copywriting.</dd></div>
@@ -2814,8 +2888,8 @@
             <!-- 02 · Sentinel -->
             <article class="ws-tool ws-tool--flip" data-i="02">
                 <figure class="ws-media">
-                    <video class="ws-vid" muted loop playsinline preload="none" onerror="this.classList.add('ws-vid--missing')">
-                        <source src="video/sentinel.mp4" type="video/mp4">
+                    <video class="ws-vid" muted loop playsinline webkit-playsinline disablepictureinpicture disableremoteplayback tabindex="-1" aria-hidden="true" preload="none" onerror="this.classList.add('ws-vid--missing')">
+                        <source src="video/sentinel.mp4?v=2" type="video/mp4">
                     </video>
                     <div class="ws-frame"><img class="ws-shot" src="img/sentinel.png" alt="Sentinel security panel inside Discord" loading="lazy"></div>
                 </figure>
@@ -2835,8 +2909,8 @@
             <!-- 03 · nftroles.xyz -->
             <article class="ws-tool" data-i="03">
                 <figure class="ws-media">
-                    <video class="ws-vid" muted loop playsinline preload="none" onerror="this.classList.add('ws-vid--missing')">
-                        <source src="video/nftroles.mp4" type="video/mp4">
+                    <video class="ws-vid" muted loop playsinline webkit-playsinline disablepictureinpicture disableremoteplayback tabindex="-1" aria-hidden="true" preload="none" onerror="this.classList.add('ws-vid--missing')">
+                        <source src="video/nftroles.mp4?v=2" type="video/mp4">
                     </video>
                     <div class="ws-frame"><img class="ws-shot" src="img/nftroles.png" alt="nftroles.xyz verification landing page" loading="lazy"></div>
                 </figure>
@@ -2867,6 +2941,16 @@
     </div>
 </div>
 
+<script>
+(() => {
+    const trigger = document.getElementById('workshop-trigger');
+    document.querySelectorAll('[data-ws-open]').forEach((b) => b.addEventListener('click', () => trigger && trigger.click()));
+    const clip = document.querySelector('.rot-preview');
+    if (clip && !matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+        new IntersectionObserver((es) => es.forEach((e) => { e.isIntersecting ? clip.play().catch(() => {}) : clip.pause(); }), { threshold: 0.3 }).observe(clip);
+    }
+})();
+</script>
 </body>
 </html>
 

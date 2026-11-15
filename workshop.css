@@ -328,15 +328,11 @@
 }
 .workshop.is-revealed .ws-vid { opacity: 0.5; }
 .ws-vid--missing { display: none; }
-/* nftroles + sentinel: modest static zoom + a mask pushed toward the top-left
-   so the bottom-right corner (the watermark) fades fully to nothing. No motion,
-   no heavy zoom (which looked grainy) — just the watermark edge cut away. */
-.ws-tool[data-i="02"] .ws-vid,
-.ws-tool[data-i="03"] .ws-vid {
-    transform: scale(1.16);
-    -webkit-mask-image: radial-gradient(118% 110% at 34% 32%, #000 30%, transparent 66%);
-            mask-image: radial-gradient(118% 110% at 34% 32%, #000 30%, transparent 66%);
-}
+/* purely ambient: never tappable, and iOS must not offer its own play button
+   (tapping that button is what opened the full-screen player on iPhone) */
+.ws-vid { pointer-events: none; }
+.ws-vid::-webkit-media-controls,
+.ws-vid::-webkit-media-controls-start-playback-button { display: none !important; -webkit-appearance: none; }
 
 /* floating window: hugs the screenshot with an even matte bezel + glow */
 .ws-frame {
